@@ -247,7 +247,7 @@
                                             <?= form_error('ttl', '<small class="text-danger pl-3">', ' </small>') ?>
                                         </div>
                                         <div class="form-group">
-                                            <label>Provinsi</label>
+                                            <label>Provinsi Asal</label>
                                             <select class="form-control" id="prov" name="prov">
                                                 <?php foreach ($prov as $v) : ?>
                                                     <option <?php if ($user['prov'] == $v['nama']) {
@@ -258,7 +258,7 @@
                                             <?= form_error('prov', '<small class="text-danger pl-3">', ' </small>') ?>
                                         </div>
                                         <div class="form-group">
-                                            <label>Kota</label>
+                                            <label>Kota Asal</label>
                                             <select class="form-control" id="kab" name="kab">
                                                 <option value="<?= $user['kab']; ?>"><?= $user['kab']; ?></option>
                                                 <option>- Pilih provinsi dahulu -</option>
@@ -270,6 +270,10 @@
                                             <textarea type="text" rows="4" class="form-control" id="alamat" name="alamat" placeholder="Alamat Lengkap"><?= $user['alamat'] ?></textarea>
                                             <?= form_error('alamat', '<small class="text-danger pl-3">', ' </small>') ?>
                                         </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Nama Ayah</label>
                                             <input type="text" class="form-control" id="nama_ayah" name="nama_ayah" placeholder="Nama Orang Tua" value="<?= $user['nama_ayah'] ?>">
@@ -280,11 +284,6 @@
                                             <input type="text" class="form-control" id="nama_ibu" name="nama_ibu" placeholder="Nama Orang Tua" value="<?= $user['nama_ibu'] ?>">
                                             <?= form_error('nama_ibu', '<small class="text-danger pl-3">', ' </small>') ?>
                                         </div>
-
-                                    </div>
-
-                                    <div class="col-md-6">
-
                                         <div class="form-group">
                                             <label>Nama Wali</label>
                                             <input type="text" class="form-control" id="nama_wali" name="nama_wali" placeholder="Nama Wali" value="<?= $user['nama_wali'] ?>">
@@ -414,30 +413,6 @@
                                             <label>Nomor Telepon Ortu / Wali</label>
                                             <input type="text" class="form-control" id="no_telp" name="no_telp" placeholder="Nomor Telepon" value="<?= $user['no_telp'] ?>">
                                             <?= form_error('no_telp', '<small class="text-danger pl-3">', ' </small>') ?>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Tahun Masuk</label>
-                                            <input type="number" class="form-control" id="thn_msk" name="thn_msk" placeholder="Tahun Masuk" value="<?= $user['thn_msk'] ?>">
-                                            <?= form_error('thn_msk', '<small class="text-danger pl-3">', ' </small>') ?>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Sekolah Asal</label>
-                                            <input type="text" class="form-control" id="sekolah_asal" name="sekolah_asal" placeholder="Sekolah Asal" value="<?= $user['sekolah_asal'] ?>">
-                                            <?= form_error('sekolah_asal', '<small class="text-danger pl-3">', ' </small>') ?>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Kelas</label>
-                                            <input type="text" class="form-control" id="kelas" name="kelas" placeholder="Kelas" value="<?= $user['kelas'] ?>">
-                                            <?= form_error('kelas', '<small class="text-danger pl-3">', ' </small>') ?>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Diniyah</label>
-                                            <input type="text" class="form-control" id="diniyah" name="diniyah" placeholder="Diniyah" value="<?= $user['diniyah'] ?>">
-                                            <?= form_error('diniyah', '<small class="text-danger pl-3">', ' </small>') ?>
                                         </div>
 
                                         <br />

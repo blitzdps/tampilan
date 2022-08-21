@@ -3,6 +3,7 @@ $notif_izin      = $this->db->get_where('perizinan', ['status' => 'Pending'])->n
 $notif_konseling = $this->db->get_where('konseling', ['status' => 'Pending'])->num_rows();
 $notif_ppdb = $this->db->get_where('ppdb', ['status' => '0'])->num_rows();
 $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
+$notif_daftar_ulang = $this->db->get_where('siswa', ['status' => '2'])->num_rows();
 ?>
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -46,7 +47,12 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Pilih menu:</h6>
-                <a class="collapse-item" href="<?= base_url('admin/daftar_siswa'); ?>">Data siswa</a>
+                <a class="collapse-item" href="<?= base_url('admin/daftar_siswa'); ?>">
+                <span>Data siswa </span> &nbsp;
+                <?php if ($notif_daftar_ulang) : ?>
+                    <span class="badge badge-danger" style="font-size: 10px;"><?= $notif_daftar_ulang ?></span>
+                <?php endif ?>
+                </a>
                 <a class="collapse-item" href="<?= base_url('admin/tambah_siswa'); ?>">Pendaftaran siswa</a>
             </div>
         </div>

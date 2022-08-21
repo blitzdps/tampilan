@@ -154,7 +154,7 @@ class Tambah extends CI_Controller
         $data_sis =  $this->db->get_where('ppdb', ['id' => $id])->row_array();
         
          $data = [
-                'point'         => '100',
+                // 'point'         => '100',
                 'nik'           => $data_sis['nik'],
                 'nis'           => $data_sis['nis'],
                 'nama'          => $data_sis['nama'],
@@ -173,18 +173,18 @@ class Tambah extends CI_Controller
                 'pek_wali'      => $data_sis['pek_wali'],
                 'peng_ortu'     => $data_sis['peng_ortu'],
                 'no_telp'       => $data_sis['no_telp'],
-                'thn_msk'       => $data_sis['thn_msk'],
-                'sekolah_asal'  => $data_sis['sekolah_asal'],
-                'kelas'         => $data_sis['kelas'],
-                'diniyah'       => $data_sis['diniyah'],
+                'thn_msk'       => date("Y"),
+                // 'sekolah_asal'  => $data_sis['sekolah_asal'],
+                // 'kelas'         => $data_sis['kelas'],
+                // 'diniyah'       => $data_sis['diniyah'],
                 'id_kelas'      => $data_sis['kelas'],
                 'date_created'  => $tgl,
-                'status'        => 1,
+                'status'        => 2,
                 'role_id'       => 5
             ];
              $this->db->insert('siswa', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-           Data siswa <strong>' . $nama . '</strong> berhasil ditambahkan!
+           Data siswa <strong>' . $data_sis['nama'] . '</strong> berhasil ditambahkan!
            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
            <span aria-hidden="true">&times;</span>
          </button>

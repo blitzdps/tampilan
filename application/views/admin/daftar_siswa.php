@@ -48,7 +48,12 @@
                                 ?>
                                 <tr>
                                     <th scope="row"><?= $i ?></th>
-                                    <td width="200"><?= $d['nama'] ?></td>
+                                    <td width="200"><?= $d['nama'] ?>
+                                <?php if($d['status'] == "2") :?>
+                                    <span class="badge badge-secondary"><font size="1.5px"> Belum Daftar Ulang </font>
+                                    </span>
+                                <?php endif; ?>
+                                    </td>
                                     <td width="100"><?= $d['nis'] ?></td>
                                     <td width="120"><?= $d['kab'] ?></td>
                                     <td width="300"><?= $d['alamat'] ?></td>
@@ -58,7 +63,11 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="<?= base_url('admin/update_siswa?id=') ?><?= $d['id'] ?>" class="badge badge-success">Edit</a>
+                                        <?php if($d['status'] == "2") : ?>
+                                            <a href="<?= base_url('admin/update_siswa?id=') ?><?= $d['id'] ?>" class="badge badge-secondary">Daftar Ulang</a>
+                                        <?php else: ?>
+                                            <a href="<?= base_url('admin/update_siswa?id=') ?><?= $d['id'] ?>" class="badge badge-success">Edit</a>
+                                        <?php endif; ?>
                                         <a href="" class="badge badge-danger" data-toggle="modal" data-target="#deleteData<?= $d['id'] ?>">Hapus</a>
 
                                     </td>

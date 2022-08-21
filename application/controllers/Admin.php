@@ -2872,11 +2872,11 @@ class Admin extends CI_Controller
                 'nama_wali' => $this->input->post('nama_wali'),
                 'pek_wali' => $this->input->post('pek_wali'),
                 'peng_ortu' => $this->input->post('peng_ortu'),
-                'no_telp' => $this->input->post('no_telp'),
-                'thn_msk' => $this->input->post('thn_msk'),
-                'sekolah_asal' => $this->input->post('sekolah_asal'),
-                'kelas' => $this->input->post('kelas'),
-                'diniyah' => $this->input->post('diniyah')
+                'no_telp' => $this->input->post('no_telp')
+                // 'thn_msk' => $this->input->post('thn_msk'),
+                // 'sekolah_asal' => $this->input->post('sekolah_asal'),
+                // 'kelas' => $this->input->post('kelas'),
+                // 'diniyah' => $this->input->post('diniyah')
             ];
 
             $this->db->where('id', $id);
