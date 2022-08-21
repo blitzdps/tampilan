@@ -9,6 +9,18 @@ class M_home extends CI_Model
     }
 
 
+    function daftar_guru($limit, $start)
+    {
+        $this->db->order_by('nama_guru', 'DESC');
+        $query = $this->db->get('tbl_guru', $limit, $start);
+        return $query;
+    }
+    function daftar_siswa($limit, $start)
+    {
+        $this->db->order_by('nama_siswa', 'DESC');
+        $query = $this->db->get('tbl_siswa', $limit, $start);
+        return $query;
+    }
     function daftar_acara($limit, $start)
     {
         $this->db->order_by('id', 'DESC');

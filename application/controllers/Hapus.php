@@ -8,6 +8,56 @@ class Hapus extends CI_Controller
     parent::__construct();
   }
 
+  public function hapus_pelajaran()
+  {
+    $id_pelajaran = $this->input->get('id_pelajaran');
+    $this->db->delete('tbl_pelajaran', array('id_pelajaran' => $id_pelajaran));
+    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Pelajaran berhasil dihapus
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+    redirect('admin/pelajaran');
+  }
+
+  public function hapus_kelas()
+  {
+    $id_kelas = $this->input->get('id_kelas');
+    $this->db->delete('tbl_kelas', array('id_kelas' => $id_kelas));
+    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Kelas berhasil dihapus
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+    redirect('admin/kelas');
+  }
+  public function hapus_jadwal_pelajaran()
+  {
+    $id_jadwal_pelajaran = $this->input->get('id_jadwal_pelajaran');
+    $this->db->delete('tbl_jadwal_pelajaran', array('id_jadwal_pelajaran' => $id_jadwal_pelajaran));
+    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Jadwal Pelajaran berhasil dihapus
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+    redirect('admin/jadwal_pelajaran');
+  }
+  public function hapus_jadwal_ujian()
+  {
+    $id_jadwal_ujian = $this->input->get('id_jadwal_ujian');
+    $this->db->delete('tbl_jadwal_ujian', array('id_jadwal_ujian' => $id_jadwal_ujian));
+    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Jadwal Ujian berhasil dihapus
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+    redirect('admin/jadwal_ujian');
+  }
+
   public function hapus_siswa()
   {
     $segmen = $this->uri->segment(3);
@@ -223,24 +273,24 @@ class Hapus extends CI_Controller
     }
   }
 
-  public function hapus_kelas()
-  {
-    $segmen = $this->uri->segment(3);
-    $id = $this->input->get('id');
+  // public function hapus_kelas()
+  // {
+  //   $segmen = $this->uri->segment(3);
+  //   $id = $this->input->get('id');
 
-    $this->db->delete('data_kelas', array('id' => $id));
-    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data Kelas berhasil dihapus
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>');
-    if ($segmen == 'karyawan') {
-      redirect('karyawan/kelas');
-    } else {
-      redirect('admin/kelas');
-    }
-  }
+  //   $this->db->delete('data_kelas', array('id' => $id));
+  //   $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+  //           Data Kelas berhasil dihapus
+  //           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  //           <span aria-hidden="true">&times;</span>
+  //         </button>
+  //         </div>');
+  //   if ($segmen == 'karyawan') {
+  //     redirect('karyawan/kelas');
+  //   } else {
+  //     redirect('admin/kelas');
+  //   }
+  // }
 
   public function hapus_konseling()
   {

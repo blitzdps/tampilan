@@ -9,6 +9,15 @@ class Import_model extends CI_Model
         parent::__construct();
     }
 
+    function pelajaran($data = array())
+    {
+        $jumlah = count($data);
+
+        if ($jumlah > 0) {
+            $this->db->insert_batch('tbl_pelajaran', $data);
+        }
+    }
+
     function simpan($data = array())
     {
         $jumlah = count($data);

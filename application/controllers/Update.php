@@ -18,37 +18,136 @@ class Update extends CI_Controller
         $this->load->helper('tgl_indo');
     }
 
-    public function update_kelas()
+    public function update_pelajaran()
     {
-        $segmen = $this->uri->segment(3);
-        $id    = $this->input->post('id');
-        $nama  = $this->input->post('kelas');
-        $peng = $this->input->post('karyawan');
+        $id_pelajaran    = $this->input->post('id_pelajaran');
+        $pelajaran  = $this->input->post('pelajaran');
+        $nama_pelajaran  = $this->input->post('nama_pelajaran');
 
-        if (!empty($peng)) {
-            $karyawan = $this->input->post('karyawan');
-        } else {
-            $karyawan = $this->input->post('karyawan1');
-        }
         $data = [
-            'nama' => $nama,
-            'id_pend' => $this->input->post('pendidikan'),
-            'id_peng' => $karyawan
+            'pelajaran' => $pelajaran,
+            'nama_pelajaran' => $nama_pelajaran
         ];
-        $this->db->where('id', $id);
-        $this->db->update('data_kelas', $data);
+        $this->db->where('id_pelajaran', $id_pelajaran);
+        $this->db->update('tbl_pelajaran', $data);
         $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data Kelas <strong>' . $nama . '</strong> berhasil diupdate
+            Data Pelajaran <strong>' . $pelajaran . '</strong> berhasil diubah
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
           </div>');
-        if ($segmen == 'karyawan') {
-            redirect('karyawan/kelas');
-        } else {
-            redirect('admin/kelas');
-        }
+        redirect('admin/pelajaran');
     }
+    public function update_kelas()
+    {
+        $id_kelas    = $this->input->post('id_kelas');
+        $kode_kelas  = $this->input->post('kode_kelas');
+        $kelas  = $this->input->post('kelas');
+        $sub_kelas  = $this->input->post('sub_kelas');
+
+        $data = [
+            'kode_kelas' => $kode_kelas,
+            'kelas' => $kelas,
+            'sub_kelas' => $sub_kelas
+        ];
+        $this->db->where('id_kelas', $id_kelas);
+        $this->db->update('tbl_kelas', $data);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Kelas <strong>' . $kode_kelas . '</strong> berhasil diubah
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+        redirect('admin/kelas');
+    }
+    public function update_jadwal_pelajaran()
+    {
+        $id_jadwal_pelajaran    = $this->input->post('id_jadwal_pelajaran');
+        $hari  = $this->input->post('hari');
+        $id_kelas  = $this->input->post('id_kelas');
+        $id_pelajaran  = $this->input->post('id_pelajaran');
+        $id_guru  = $this->input->post('id_guru');
+        $jam_mulai  = $this->input->post('jam_mulai');
+        $jam_selesai  = $this->input->post('jam_selesai');
+
+        $data = [
+            'hari' => $hari,
+            'id_kelas' => $id_kelas,
+            'id_pelajaran' => $id_pelajaran,
+            'id_guru' => $id_guru,
+            'jam_mulai' => $jam_mulai,
+            'jam_selesai' => $jam_selesai
+        ];
+        $this->db->where('id_jadwal_pelajaran', $id_jadwal_pelajaran);
+        $this->db->update('tbl_jadwal_pelajaran', $data);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Jadwal Pelajaran <strong>' . $id_jadwal_pelajaran . '</strong> berhasil diubah
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+        redirect('admin/jadwal_pelajaran');
+    }
+    public function update_jadwal_ujian()
+    {
+        $id_jadwal_ujian    = $this->input->post('id_jadwal_ujian');
+        $tanggal  = $this->input->post('tanggal');
+        $id_pelajaran  = $this->input->post('id_pelajaran');
+        $id_guru  = $this->input->post('id_guru');
+        $jam_mulai  = $this->input->post('jam_mulai');
+        $jam_selesai  = $this->input->post('jam_selesai');
+        $keterangan  = $this->input->post('keterangan');
+
+        $data = [
+            'tanggal' => $tanggal,
+            'id_pelajaran' => $id_pelajaran,
+            'id_guru' => $id_guru,
+            'jam_mulai' => $jam_mulai,
+            'jam_selesai' => $jam_selesai,
+            'keterangan' => $keterangan
+        ];
+        $this->db->where('id_jadwal_ujian', $id_jadwal_ujian);
+        $this->db->update('tbl_jadwal_ujian', $data);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Jadwal Ujian <strong>' . $id_jadwal_ujian . '</strong> berhasil diubah
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+        redirect('admin/jadwal_ujian');
+    }
+
+    // public function update_kelas()
+    // {
+    //     $segmen = $this->uri->segment(3);
+    //     $id    = $this->input->post('id');
+    //     $nama  = $this->input->post('kelas');
+    //     $peng = $this->input->post('karyawan');
+
+    //     if (!empty($peng)) {
+    //         $karyawan = $this->input->post('karyawan');
+    //     } else {
+    //         $karyawan = $this->input->post('karyawan1');
+    //     }
+    //     $data = [
+    //         'nama' => $nama,
+    //         'id_pend' => $this->input->post('pendidikan'),
+    //         'id_peng' => $karyawan
+    //     ];
+    //     $this->db->where('id', $id);
+    //     $this->db->update('data_kelas', $data);
+    //     $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+    //         Data Kelas <strong>' . $nama . '</strong> berhasil diupdate
+    //         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    //         <span aria-hidden="true">&times;</span>
+    //       </button>
+    //       </div>');
+    //     if ($segmen == 'karyawan') {
+    //         redirect('karyawan/kelas');
+    //     } else {
+    //         redirect('admin/kelas');
+    //     }
+    // }
 
 
     public function update_pelanggaran()

@@ -50,7 +50,7 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto <?php if ($menu == 'home') {
+          <!-- <li><a class="nav-link scrollto <?php if ($menu == 'home') {
                                             echo 'active';
                                           } ?>" href="<?= base_url('home'); ?>">Home</a></li>
           <li><a class="nav-link scrollto <?php if ($menu == 'acara') {
@@ -64,28 +64,72 @@
                                           } ?>" href="<?= base_url('about'); ?>">Tentang Kami</a></li>
           <li><a class="nav-link scrollto <?php if ($menu == 'kontak') {
                                             echo 'active';
-                                          } ?>" href="<?= base_url('kontak'); ?>">Kontak</a></li>
-          <!-- <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+                                          } ?>" href="<?= base_url('kontak'); ?>">Kontak</a></li> -->
+
+
+          <li><a class="nav-link scrollto <?php if ($menu == 'beranda') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('beranda'); ?>">Beranda</a></li>
+          <li class="dropdown"><a href="#"><span>Profil</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+              <li><a class="nav-link scrollto <?php if ($menu == 'about') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('about'); ?>">Sejarah</a></li>
+              <li><a href="#">Struktur Organisasi</a></li>
+              <li><a class="nav-link scrollto <?php if ($menu == 'gallery') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('gallery'); ?>">Galeri</a></li>
+            </ul>
+          </li>
+          <li class="dropdown"><a href="#"><span>Data</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li class="dropdown"><a href="#"><span>Data Master</span> <i class="bi bi-chevron-right"></i></a>
                 <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
+                  <li><a <?php if ($menu == 'guru') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('front_guru'); ?>">Guru</a></li>
+                  <li><a href="#">Karyawan</a></li>
+                  <li><a <?php if ($menu == 'siswa') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('front_siswa'); ?>">Siswa</a></li>
                 </ul>
               </li>
-              <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
+              <li class="dropdown"><a href="#"><span>Data KBM</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a <?php if ($menu == 'kelas') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('front_kelas'); ?>">Kelas</a></li>
+                  <li><a <?php if ($menu == 'jadwal_pelajaran') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('front_jadwal_pelajaran'); ?>">Jadwal Pelajaran</a></li>
+                  <li><a <?php if ($menu == 'jadwal_ujian') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('front_jadwal_ujian'); ?>">Jadwal Ujian</a></li>
+                </ul>
+              </li>
             </ul>
-          </li> -->
+          </li>
+          <li class="dropdown"><a href="#"><span>Informasi</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a class="nav-link scrollto <?php if ($menu == 'acara') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('acara'); ?>">Acara</a></li>
+              <li><a href="#">Pengumuman</a></li>
+              <li><a href="#">Artikel</a></li>
+              <li><a class="nav-link scrollto <?php if ($menu == 'ppdb') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('ppdb'); ?>">PPDB</a></li>
+            </ul>
+          </li>
+          <li><a class="nav-link scrollto <?php if ($menu == 'kontak') {
+                                            echo 'active';
+                                          } ?>" href="<?= base_url('kontak'); ?>">Kontak</a></li>
+
           <li><a class="getstarted scrollto" href="<?= base_url('auth'); ?>">Login</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+      </nav>
+      <!-- .navbar -->
 
     </div>
   </header><!-- End Header -->

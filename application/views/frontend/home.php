@@ -105,18 +105,8 @@
           <div class="count-box">
             <i class="bi bi-person-circle"></i>
             <div>
-              <span data-purecounter-start="0" data-purecounter-end="<?= $sum_karyawan ?>" data-purecounter-duration="1" class="purecounter"></span>
-              <p>Karyawan</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="count-box">
-            <i class="bi bi-bank2" style="color: #ee6c20;"></i>
-            <div>
-              <span data-purecounter-start="0" data-purecounter-end="<?= $sum_pendidikan ?>" data-purecounter-duration="1" class="purecounter"></span>
-              <p>Pendidikan</p>
+              <span data-purecounter-start="0" data-purecounter-end="<?= $sum_guru ?>" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Guru</p>
             </div>
           </div>
         </div>

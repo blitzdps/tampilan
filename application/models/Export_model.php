@@ -9,6 +9,13 @@ class Export_model extends CI_Model
         parent::__construct();
     }
 
+    function getPelajaran()
+    {
+        $this->db->from('tbl_pelajaran'); //nama tabel harap disesuaikan dengan nama tabel milik sobat
+
+        return $this->db->get();
+    }
+
     function getAll()
     {
         $this->db->from('siswa'); //nama tabel harap disesuaikan dengan nama tabel milik sobat

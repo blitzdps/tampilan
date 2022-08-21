@@ -9,31 +9,13 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $web['nama'] ?></h1>
-        <a href="<?= base_url('admin/tambah_siswa'); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Tambah siswa</a>
+        
     </div>
 
     <!-- Content Row -->
     <div class="row">
 
-        <!-- Pending Requests Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <a href="<?= base_url('admin/daftar_absen') ?>">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Presensi</div>
-                            </a>
-                            <a href="#" class="badge badge-success" data-toggle="modal" data-target="#Absen">Absen baru</a>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-list-alt fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+      
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -60,7 +42,7 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <a href="<?= base_url('admin/karyawan') ?>">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Karyawan</div>
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Guru</div>
                             </a>
                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?= number_format($sum_peng, 0, ',', '.') ?></div>
                         </div>
@@ -73,7 +55,7 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <!-- <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -89,7 +71,7 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 
@@ -99,90 +81,7 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
     <div class="row">
 
         <!-- Color System -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-primary text-white shadow">
-                        <div class="card-body">
-                            <a href="<?= base_url('admin/konseling') ?>" style="color:white">E-konseling <?php if ($notif_konseling) : ?><span class="badge badge-danger"><?= $notif_konseling ?></span><?php endif ?></a>
-                            <div class="text-white-50 small">Total :
-                                <span class="badge badge-success"><?= $sum_konsel ?></span>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-success text-white shadow">
-                        <div class="card-body">
-                            <a href="<?= base_url('admin/perizinan') ?>" style="color:white">Perizinan <?php if ($notif_izin) : ?><span class="badge badge-danger"><?= $notif_izin ?></span><?php endif ?></a>
-                            <div class="text-white-50 small">Total :
-                                <span class="badge badge-primary"><?= $sum_izin ?></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-info text-white shadow">
-                        <div class="card-body">
-                            <a href="<?= base_url('admin/pelanggaran') ?>" style="color:white">Pelanggaran</a>
-                            <div class="text-white-50 small">Total :
-                                <span class="badge badge-warning"><?= $sum_takzir ?></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-warning text-white shadow">
-                        <div class="card-body">
-                            <a href="<?= base_url('admin/kontak') ?>" style="color:white">Kontak <?php if ($notif_kontak) : ?>
-                                    <span class="badge badge-danger"> <?= $notif_kontak ?></span>
-                                <?php endif ?></a>
-                            <div class="text-white-50 small">Total :
-                                <span class="badge badge-info"><?= $sum_kontak ?></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <a href="<?= base_url('admin/acara') ?>">
-                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Acara</div>
-                                    </a>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $sum_acara ?></div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <a href="<?= base_url('admin/gallery') ?>">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"> Gallery</div>
-                                    </a>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $sum_gallery ?></div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-image fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+        
         <!-- Pie Chart -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
@@ -227,119 +126,7 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
 
     <!-- Content Row -->
 
-    <div class="row">
-
-        <div class="col-md-6">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-list fa-fw"></i> 7 siswa Dengan Point Terendah</h6>
-                </div>
-                <div class="card-body">
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th width="50px">Top</th>
-                                    <th>Nama</th>
-                                    <th>Point</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $no = 1;
-                                foreach ($siswa as $sis) : ?>
-                                    <?php if ($no == 1) {
-                                        $label = "success";
-                                    } else if ($no == 2) {
-                                        $label = "primary";
-                                    } else if ($no == 3) {
-                                        $label = "info";
-                                    } else if ($no == 4) {
-                                        $label = "warning";
-                                    } else if ($no == 5) {
-                                        $label = "secondary";
-                                    } else if ($no == 6) {
-                                        $label = "dark";
-                                    } else if ($no == 7) {
-                                        $label = "danger";
-                                    } ?>
-                                    <tr>
-
-                                        <td class="text-center">
-                                            <button class="btn-circle btn-<?= $label ?> btn-sm"><?= $no ?></button>
-                                        </td>
-                                        <td><?= $sis['nama']; ?></td>
-                                        <td><?= number_format($sis['point'], 0, ',', '.'); ?></td>
-                                    </tr>
-                                <?php $no++;
-                                endforeach ?>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-6">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-list fa-fw"></i> 7 Jenis Pelanggaran Yang Sering Terjadi</h6>
-                </div>
-                <div class="card-body">
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th width="50px">Top</th>
-                                    <th>Nama</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $no = 1;
-                                foreach ($pelanggaran as $top) : ?>
-                                    <?php if ($no == 1) {
-                                        $label = "success";
-                                    } else if ($no == 2) {
-                                        $icon = '';
-                                        $label = "primary";
-                                    } else if ($no == 3) {
-                                        $icon = '';
-                                        $label = "info";
-                                    } else if ($no == 4) {
-                                        $icon = '';
-                                        $label = "warning";
-                                    } else if ($no == 5) {
-                                        $icon = '';
-                                        $label = "secondary";
-                                    } else if ($no == 6) {
-                                        $icon = '';
-                                        $label = "dark";
-                                    } else if ($no == 7) {
-                                        $icon = '';
-                                        $label = "danger";
-                                    } ?>
-                                    <tr>
-                                        <td class="text-center">
-                                            <button class="btn-circle btn-<?= $label ?> btn-sm"><?= $no ?></button>
-                                        </td>
-                                        <td><?= $top['nama']; ?></td>
-                                        <td><?= number_format($top['jumlah'], 0, ',', '.'); ?></td>
-                                    </tr>
-                                <?php $no++;
-                                endforeach ?>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
+   
 
 </div>
 

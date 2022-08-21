@@ -14,10 +14,10 @@
                         </div>
                     </h4>
                     <?= $this->session->flashdata('message') ?>
-                    <form style="margin: 20px 0;" action="<?= base_url() . 'admin/daftar_siswa'; ?>" method="post">
+                    <form style="margin: 20px 0;" action="<?= base_url() . 'admin/daftar_guru'; ?>" method="post">
                         <div class="form-row">
                             <div class="form-group col-lg-3">
-                                <a href="<?= base_url('admin/tambah_siswa'); ?>" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Pendaftaran siswa</a>
+                                <a href="<?= base_url('admin/tambah_guru'); ?>" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Pendaftaran Guru</a>
                             </div>
                     </form>
                 </div>
@@ -29,7 +29,7 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nama Lengkap</th>
-                                <th scope="col">NIS</th>
+                                <th scope="col">NIP</th>
                                 <th scope="col">Kota</th>
                                 <th scope="col">Alamat</th>
                                 <th scope="col">Tanggal Lahir</th>
@@ -158,7 +158,7 @@
 </div>
 <!-- /.container-fluid -->
 
-<!-- <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function() {
         $('#prov').change(function() {
             $.ajax({
@@ -188,4 +188,4 @@
             });
         });
     });
-</script> -->
+</script>

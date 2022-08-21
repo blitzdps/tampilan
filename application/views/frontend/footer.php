@@ -107,6 +107,16 @@
   <script src="<?= base_url('assets/'); ?>vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="<?= base_url('assets/'); ?>vendor/glightbox/js/glightbox.min.js"></script>
 
+  <!-- Tambahan -->
+  <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.mask.js"></script>
+  <script src="<?= base_url('assets/'); ?>vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="<?= base_url('assets/'); ?>js/sb-admin-2.min.js"></script>
+<script src="<?= base_url('assets/'); ?>vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
+<script src="<?= base_url('assets/'); ?>vendor/bootstrap/js/bootstrap4.min.js"></script>
+
+
   <!-- Template Main JS File -->
   <script src="<?= base_url('assets/'); ?>js/main.js"></script>
 
@@ -119,6 +129,12 @@
         x.style.display = 'none';
       }
     };
+
+    $(document).ready(function() {
+        $('#mytable').DataTable({
+            responsive: true
+        });
+    });
   </script>
 
   </body>

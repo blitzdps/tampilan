@@ -62,6 +62,8 @@ class Admin extends CI_Controller
 
         $data['kelas'] = $this->db->get("data_kelas")->num_rows();
         $data['pendidikan'] = $this->db->get("data_pendidikan")->result_array();
+        $data['pelajaran'] = $this->db->get("tbl_pelajaran")->result_array();
+        $data['kelas'] = $this->db->get("tbl_kelas")->result_array();
         $data['about'] = $this->db->get("about")->row_array();
 
         $data['sum_siswa'] = $this->db->get("siswa")->num_rows();
@@ -333,6 +335,735 @@ class Admin extends CI_Controller
         }
     }
 
+    public function daftar_guru()
+    {
+        $data['menu'] = 'menu-1';
+        $data['title'] = 'Daftar Guru';
+        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
+        $data['web'] =  $this->db->get('website')->row_array();
+
+        $filter   = $this->input->post('filter');
+        $id_prov     = $this->input->post('prov');
+        $kab      = $this->input->post('kab');
+
+        $prov =  $data['prov'] = $this->db->get_where('provinsi', ['id_prov' => $id_prov])->row_array();
+
+
+        $this->db->order_by('nama', 'asc');
+        $data['prov'] = $this->db->get('provinsi')->result_array();
+        $data['kab'] = $this->db->get('kabupaten')->result_array();
+
+        if ($filter) {
+            if (!empty($id_prov)) {
+                $this->db->where('prov', $prov['nama']);
+            }
+            if (!empty($kab)) {
+                $this->db->where('kab', $kab);
+                $kota = ' kabupaten <strong>' . $kab . '</strong>';
+            } else {
+                $kota = '';
+            }
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+           <strong>Success!</strong> Sortir siswa dari provinsi <strong>' . $prov['nama'] . '</strong>' . $kota . '.
+           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+          </div>');
+        }
+
+        $this->db->order_by('point', 'ASC');
+        $data['siswa'] =  $this->db->get('siswa')->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar_admin', $data);
+        $this->load->view('template/topbar_admin', $data);
+        $this->load->view('admin/daftar_guru', $data);
+        $this->load->view('template/footer_admin');
+
+
+        if ($this->input->post('submit', TRUE) == 'upload') {
+            $config['upload_path']      = './temp_doc/'; //siapkan path untuk upload file
+            $config['allowed_types']    = 'xlsx|xls'; //siapkan format file
+            $config['file_name']        = 'doc' . time(); //rename file yang diupload
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('excel')) {
+                //fetch data upload
+                $file   = $this->upload->data();
+
+                $reader = ReaderEntityFactory::createXLSXReader(); //buat xlsx reader
+                $reader->open('./temp_doc/' . $file['file_name']); //open file xlsx yang baru saja diunggah
+
+                //looping pembacaan sheet dalam file        
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    $numRow = 1;
+
+                    //siapkan variabel array kosong untuk menampung variabel array data
+                    $save   = array();
+
+                    //looping pembacaan row dalam sheet
+                    foreach ($sheet->getRowIterator() as $row) {
+
+                        if ($numRow > 1) {
+                            //ambil cell
+                            $cells = $row->getCells();
+
+                            $data = array(
+                                'point'         => '100',
+                                'nik'           => $cells[0],
+                                'nis'           => $cells[1],
+                                'nama'          => $cells[2],
+                                'email'         => $cells[3],
+                                'no_hp'         => $cells[4],
+                                'password'      => password_hash($cells[1], PASSWORD_DEFAULT),
+                                'jk'            => $cells[5],
+                                'ttl'           => $cells[6],
+                                'prov'          => $cells[7],
+                                'kab'           => $cells[8],
+                                'alamat'        => $cells[9],
+                                'nama_ayah'     => $cells[10],
+                                'nama_ibu'      => $cells[11],
+                                'pek_ayah'      => $cells[12],
+                                'pek_ibu'       => $cells[13],
+                                'nama_wali'     => $cells[14],
+                                'pek_wali'      => $cells[15],
+                                'peng_ortu'     => $cells[16],
+                                'no_telp'       => $cells[17],
+                                'thn_msk'       => $cells[18],
+                                'sekolah_asal'  => $cells[19],
+                                'kelas'         => $cells[20],
+                                'diniyah'       => $cells[21],
+                                'status'        => 1,
+                                'role_id'       => 5
+                            );
+
+                            //tambahkan array $data ke $save
+                            array_push($save, $data);
+                        }
+
+                        $numRow++;
+                    }
+
+                    //simpan data ke database
+                    $this->Import_model->simpan($save);
+
+                    //tutup spout reader
+                    $reader->close();
+
+                    //hapus file yang sudah diupload
+                    unlink('./temp_doc/' . $file['file_name']);
+
+                    //tampilkan pesan success dan redirect ulang ke index controller import
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> berhasil mengimport data :)
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>');
+                    redirect('admin/daftar_guru');
+                }
+            } else {
+                //tampilkan pesan error jika file gagal diupload
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> ' . $this->upload->display_errors() . '
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>');
+                redirect('admin/daftar_guru');
+            }
+        }
+    }
+
+    public function tambah_guru()
+    {
+
+        $data['menu'] = 'menu-1';
+        $data['title'] = 'Tambah Guru';
+        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
+        $data['web'] =  $this->db->get('website')->row_array();
+        
+        $this->form_validation->set_rules('nik', 'NIK', 'required|is_unique[siswa.nik]', [
+            'is_unique' => 'Nik ini sudah terdaftar!',
+            'required' => 'Nik tidak boleh kosong!'
+        ]);
+        $this->form_validation->set_rules('nis', 'NIS', 'required|is_unique[siswa.nis]', [
+            'is_unique' => 'Nis ini sudah terdaftar!',
+            'required' => 'Nis tidak boleh kosong!'
+        ]);
+        $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[siswa.email]', [
+            'is_unique' => 'Email ini sudah terdaftar!',
+            'required' => 'Email tidak boleh kosong!'
+        ]);
+        $this->form_validation->set_rules('jk', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('ttl', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('prov', 'Provinsi', 'required');
+        $this->form_validation->set_rules('kab', 'Kota', 'required');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
+        $this->form_validation->set_rules('nama_ayah', 'Nama Ayah', 'required');
+        $this->form_validation->set_rules('nama_ibu', 'Nama ibu', 'required');
+        $this->form_validation->set_rules('pek_ayah', 'Pekerjaan Ayah', 'required');
+        $this->form_validation->set_rules('pek_ibu', 'Pekerjaan Ibu', 'required');
+        $this->form_validation->set_rules('no_telp', 'Nomor Telepon', 'required');
+        $this->form_validation->set_rules('thn_msk', 'Tahun Masuk', 'required');
+        $this->form_validation->set_rules('sekolah_asal', 'Sekolah Asal', 'required');
+        $this->form_validation->set_rules('diniyah', 'Diniyah', 'required');
+        $this->form_validation->set_rules('pendidikan', 'Pendidikan', 'required');
+        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('template/header', $data);
+            $this->load->view('template/sidebar_admin', $data);
+            $this->load->view('template/topbar_admin', $data);
+            $this->load->view('admin/tambah_guru', $data);
+            $this->load->view('template/footer_admin');
+        } else {
+
+            $tgl = date('Y-m-d');
+            $nama = $this->input->post('nama');
+            $id_prov = $this->input->post('prov');
+
+            $provinsi =  $data['prov'] = $this->db->get_where('provinsi', ['id_prov' => $id_prov])->row_array();
+            $data = [
+                'point'         => '100',
+                'nik'           => $this->input->post('nik'),
+                'nis'           => $this->input->post('nis'),
+                'nama'          => $nama,
+                'email'         => $this->input->post('email'),
+                'password'      => password_hash($this->input->post('nis'), PASSWORD_DEFAULT),
+                'jk'            => $this->input->post('jk'),
+                'ttl'           => $this->input->post('ttl'),
+                'prov'          => $provinsi['nama'],
+                'kab'           => $this->input->post('kab'),
+                'alamat'        => $this->input->post('alamat'),
+                'nama_ayah'     => $this->input->post('nama_ayah'),
+                'nama_ibu'      => $this->input->post('nama_ibu'),
+                'pek_ayah'      => $this->input->post('pek_ayah'),
+                'pek_ibu'       => $this->input->post('pek_ibu'),
+                'nama_wali'     => $this->input->post('nama_wali'),
+                'pek_wali'      => $this->input->post('pek_wali'),
+                'peng_ortu'     => $this->input->post('peng_ortu'),
+                'no_telp'       => $this->input->post('no_telp'),
+                'thn_msk'       => $this->input->post('thn_msk'),
+                'sekolah_asal'  => $this->input->post('sekolah_asal'),
+                'kelas'         => $this->input->post('old_kelas'),
+                'diniyah'       => $this->input->post('diniyah'),
+                'id_pend'       => $this->input->post('pendidikan'),
+                'id_kelas'      => $this->input->post('kelas'),
+                'date_created'  => $tgl,
+                'status'        => 1,
+                'role_id'       => 5
+            ];
+
+            $this->db->insert('siswa', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+           Data siswa <strong>' . $nama . '</strong> berhasil ditambahkan!
+           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+          </div>');
+            redirect('admin/daftar_siswa');
+        }
+    }
+
+    public function pelajaran()
+    {
+        $data['menu'] = 'menu-1';
+        $data['title'] = 'Data Pelajaran';
+        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
+        $data['web'] =  $this->db->get('website')->row_array();
+
+        $data['pelajaran'] =  $this->db->get('tbl_pelajaran')->result_array();
+
+        $this->form_validation->set_rules('pelajaran', 'Kode Pelajaran', 'required');
+        $this->form_validation->set_rules('nama_pelajaran', 'Nama Pelajaran', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('template/header', $data);
+            $this->load->view('template/sidebar_admin', $data);
+            $this->load->view('template/topbar_admin', $data);
+            $this->load->view('admin/kbm/pelajaran', $data);
+            $this->load->view('template/footer_admin');
+        } else {
+            $pelajaran = $this->input->post('pelajaran');
+            $this->db->where('pelajaran', $pelajaran);
+            $cek_data =  $this->db->get('tbl_pelajaran')->row_array();
+
+            if ($cek_data['pelajaran'] == $pelajaran) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Data Pelajaran <strong>' . $pelajaran . '</strong> Sudah Ada :(
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>');
+                redirect('admin/pelajaran');
+            }
+
+            $data = [
+                'pelajaran' => $pelajaran,
+                'nama_pelajaran' => $this->input->post('nama_pelajaran')
+
+            ];
+            $this->db->insert('tbl_pelajaran', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Pelajaran <strong>' . $pelajaran . '</strong> berhasil ditambahkan :)
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+            redirect('admin/pelajaran');
+        }
+
+        if ($this->input->post('submit', TRUE) == 'upload') {
+            $config['upload_path']      = './temp_doc/'; //siapkan path untuk upload file
+            $config['allowed_types']    = 'xlsx|xls'; //siapkan format file
+            $config['file_name']        = 'doc' . time(); //rename file yang diupload
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('excel')) {
+                //fetch data upload
+                $file   = $this->upload->data();
+
+                $reader = ReaderEntityFactory::createXLSXReader(); //buat xlsx reader
+                $reader->open('./temp_doc/' . $file['file_name']); //open file xlsx yang baru saja diunggah
+
+                //looping pembacaan sheet dalam file        
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    $numRow = 1;
+
+                    //siapkan variabel array kosong untuk menampung variabel array data
+                    $save   = array();
+
+                    //looping pembacaan row dalam sheet
+                    foreach ($sheet->getRowIterator() as $row) {
+
+                        if ($numRow > 1) {
+                            //ambil cell
+                            $cells = $row->getCells();
+
+                            $data = array(
+                                'pelajaran'     => $cells[0],
+                                'nama_pelajaran'=> $cells[1]
+                            );
+
+                            //tambahkan array $data ke $save
+                            array_push($save, $data);
+                        }
+
+                        $numRow++;
+                    }
+
+                    //simpan data ke database
+                    $this->Import_model->pelajaran($save);
+
+                    //tutup spout reader
+                    $reader->close();
+
+                    //hapus file yang sudah diupload
+                    unlink('./temp_doc/' . $file['file_name']);
+
+                    //tampilkan pesan success dan redirect ulang ke index controller import
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> berhasil mengimport data :)
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>');
+                    redirect('admin/pelajaran');
+                }
+            } else {
+                //tampilkan pesan error jika file gagal diupload
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> ' . $this->upload->display_errors() . '
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>');
+                redirect('admin/pelajaran');
+            }
+        }
+    }
+
+    public function kelas()
+    {
+        $data['menu'] = 'menu-1';
+        $data['title'] = 'Data Kelas';
+        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
+        $data['web'] =  $this->db->get('website')->row_array();
+
+        $data['kelas'] =  $this->db->get('tbl_kelas')->result_array();
+
+        $this->form_validation->set_rules('kode_kelas', 'Kode Kelas', 'required');
+        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
+        $this->form_validation->set_rules('sub_kelas', 'Sub Kelas', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('template/header', $data);
+            $this->load->view('template/sidebar_admin', $data);
+            $this->load->view('template/topbar_admin', $data);
+            $this->load->view('admin/kbm/kelas', $data);
+            $this->load->view('template/footer_admin');
+        } else {
+            $kode_kelas = $this->input->post('kode_kelas');
+            $this->db->where('kode_kelas', $kode_kelas);
+            $cek_data =  $this->db->get('tbl_kelas')->row_array();
+
+            if ($cek_data['kode_kelas'] == $kode_kelas) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Data Kelas <strong>' . $kode_kelas . '</strong> Sudah Ada :(
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>');
+                redirect('admin/kelas');
+            }
+
+            $data = [
+                'kode_kelas' => $kode_kelas,
+                'kelas' => $this->input->post('kelas'),
+                'sub_kelas' => $this->input->post('sub_kelas')
+
+            ];
+            $this->db->insert('tbl_kelas', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Kelas <strong>' . $kode_kelas . '</strong> berhasil ditambahkan :)
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+            redirect('admin/kelas');
+        }
+
+        if ($this->input->post('submit', TRUE) == 'upload') {
+            $config['upload_path']      = './temp_doc/'; //siapkan path untuk upload file
+            $config['allowed_types']    = 'xlsx|xls'; //siapkan format file
+            $config['file_name']        = 'doc' . time(); //rename file yang diupload
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('excel')) {
+                //fetch data upload
+                $file   = $this->upload->data();
+
+                $reader = ReaderEntityFactory::createXLSXReader(); //buat xlsx reader
+                $reader->open('./temp_doc/' . $file['file_name']); //open file xlsx yang baru saja diunggah
+
+                //looping pembacaan sheet dalam file        
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    $numRow = 1;
+
+                    //siapkan variabel array kosong untuk menampung variabel array data
+                    $save   = array();
+
+                    //looping pembacaan row dalam sheet
+                    foreach ($sheet->getRowIterator() as $row) {
+
+                        if ($numRow > 1) {
+                            //ambil cell
+                            $cells = $row->getCells();
+
+                            $data = array(
+                                'pelajaran'     => $cells[0],
+                                'nama_pelajaran'=> $cells[1]
+                            );
+
+                            //tambahkan array $data ke $save
+                            array_push($save, $data);
+                        }
+
+                        $numRow++;
+                    }
+
+                    //simpan data ke database
+                    $this->Import_model->pelajaran($save);
+
+                    //tutup spout reader
+                    $reader->close();
+
+                    //hapus file yang sudah diupload
+                    unlink('./temp_doc/' . $file['file_name']);
+
+                    //tampilkan pesan success dan redirect ulang ke index controller import
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> berhasil mengimport data :)
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>');
+                    redirect('admin/pelajaran');
+                }
+            } else {
+                //tampilkan pesan error jika file gagal diupload
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> ' . $this->upload->display_errors() . '
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>');
+                redirect('admin/pelajaran');
+            }
+        }
+    }
+
+    public function jadwal_pelajaran()
+    {
+        $data['menu'] = 'menu-1';
+        $data['title'] = 'Data Jadwal Pelajaran';
+        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
+        $data['web'] =  $this->db->get('website')->row_array();
+
+        $data['jadwal_pelajaran'] =  $this->db->get('tbl_jadwal_pelajaran')->result_array();
+
+        $this->form_validation->set_rules('hari', 'Hari', 'required');
+        $this->form_validation->set_rules('id_kelas', 'Kelas', 'required');
+        $this->form_validation->set_rules('id_pelajaran', 'Nama Pelajaran', 'required');
+        $this->form_validation->set_rules('id_guru', 'Nama Guru', 'required');
+        $this->form_validation->set_rules('jam_mulai', 'Jam Mulai', 'required');
+        $this->form_validation->set_rules('jam_selesai', 'Jam Selesai', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('template/header', $data);
+            $this->load->view('template/sidebar_admin', $data);
+            $this->load->view('template/topbar_admin', $data);
+            $this->load->view('admin/kbm/jadwal_pelajaran', $data);
+            $this->load->view('template/footer_admin');
+        } else {
+            $id_jadwal_pelajaran = $this->input->post('id_jadwal_pelajaran');
+            $this->db->where('id_jadwal_pelajaran', $id_jadwal_pelajaran);
+            $cek_data =  $this->db->get('tbl_kelas')->row_array();
+
+            if ($cek_data['id_jadwal_pelajaran'] == $id_jadwal_pelajaran) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Data jadwal <strong>' . $id_jadwal_pelajaran . '</strong> Sudah Ada :(
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>');
+                redirect('admin/jadwal_pelajaran');
+            }
+
+            $data = [
+                'hari' => $this->input->post('hari'),
+                'id_kelas' => $this->input->post('id_kelas'),
+                'id_pelajaran' => $this->input->post('id_pelajaran'),
+                'id_guru' => $this->input->post('id_guru'),
+                'jam_mulai' => $this->input->post('jam_mulai'),
+                'jam_selesai' => $this->input->post('jam_selesai')
+
+            ];
+            $this->db->insert('tbl_jadwal_pelajaran', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Jadwal pelajaran <strong>' . $id_jadwal_pelajaran . '</strong> berhasil ditambahkan :)
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+            redirect('admin/jadwal_pelajaran');
+        }
+
+        if ($this->input->post('submit', TRUE) == 'upload') {
+            $config['upload_path']      = './temp_doc/'; //siapkan path untuk upload file
+            $config['allowed_types']    = 'xlsx|xls'; //siapkan format file
+            $config['file_name']        = 'doc' . time(); //rename file yang diupload
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('excel')) {
+                //fetch data upload
+                $file   = $this->upload->data();
+
+                $reader = ReaderEntityFactory::createXLSXReader(); //buat xlsx reader
+                $reader->open('./temp_doc/' . $file['file_name']); //open file xlsx yang baru saja diunggah
+
+                //looping pembacaan sheet dalam file        
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    $numRow = 1;
+
+                    //siapkan variabel array kosong untuk menampung variabel array data
+                    $save   = array();
+
+                    //looping pembacaan row dalam sheet
+                    foreach ($sheet->getRowIterator() as $row) {
+
+                        if ($numRow > 1) {
+                            //ambil cell
+                            $cells = $row->getCells();
+
+                            $data = array(
+                                'pelajaran'     => $cells[0],
+                                'nama_pelajaran'=> $cells[1]
+                            );
+
+                            //tambahkan array $data ke $save
+                            array_push($save, $data);
+                        }
+
+                        $numRow++;
+                    }
+
+                    //simpan data ke database
+                    $this->Import_model->pelajaran($save);
+
+                    //tutup spout reader
+                    $reader->close();
+
+                    //hapus file yang sudah diupload
+                    unlink('./temp_doc/' . $file['file_name']);
+
+                    //tampilkan pesan success dan redirect ulang ke index controller import
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> berhasil mengimport data :)
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>');
+                    redirect('admin/jadwal_pelajaran');
+                }
+            } else {
+                //tampilkan pesan error jika file gagal diupload
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> ' . $this->upload->display_errors() . '
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>');
+                redirect('admin/jadwal_pelajaran');
+            }
+        }
+    }
+
+
+    public function jadwal_ujian()
+    {
+        $data['menu'] = 'menu-1';
+        $data['title'] = 'Data Jadwal Ujian';
+        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
+        $data['web'] =  $this->db->get('website')->row_array();
+
+        $data['jadwal_ujian'] =  $this->db->get('tbl_jadwal_ujian')->result_array();
+
+        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        $this->form_validation->set_rules('id_kelas', 'Kelas', 'required');
+        $this->form_validation->set_rules('id_pelajaran', 'Nama Pelajaran', 'required');
+        $this->form_validation->set_rules('id_guru', 'Nama Guru', 'required');
+        $this->form_validation->set_rules('jam_mulai', 'Jam Mulai', 'required');
+        $this->form_validation->set_rules('jam_selesai', 'Jam Selesai', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('template/header', $data);
+            $this->load->view('template/sidebar_admin', $data);
+            $this->load->view('template/topbar_admin', $data);
+            $this->load->view('admin/kbm/jadwal_ujian', $data);
+            $this->load->view('template/footer_admin');
+        } else {
+            $id_jadwal_ujian = $this->input->post('id_jadwal_ujian');
+            $this->db->where('id_jadwal_ujian', $id_jadwal_ujian);
+            $cek_data =  $this->db->get('tbl_kelas')->row_array();
+
+            if ($cek_data['id_jadwal_ujian'] == $id_jadwal_ujian) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Data jadwal <strong>' . $id_jadwal_ujian . '</strong> Sudah Ada :(
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>');
+                redirect('admin/jadwal_ujian');
+            }
+
+            $data = [
+                'hari' => $this->input->post('hari'),
+                'id_kelas' => $this->input->post('id_kelas'),
+                'id_pelajaran' => $this->input->post('id_pelajaran'),
+                'id_guru' => $this->input->post('id_guru'),
+                'jam_mulai' => $this->input->post('jam_mulai'),
+                'jam_selesai' => $this->input->post('jam_selesai')
+
+            ];
+            $this->db->insert('tbl_jadwal_ujian', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data Jadwal Ujian <strong>' . $id_jadwal_ujian . '</strong> berhasil ditambahkan :)
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>');
+            redirect('admin/jadwal_ujian');
+        }
+
+        if ($this->input->post('submit', TRUE) == 'upload') {
+            $config['upload_path']      = './temp_doc/'; //siapkan path untuk upload file
+            $config['allowed_types']    = 'xlsx|xls'; //siapkan format file
+            $config['file_name']        = 'doc' . time(); //rename file yang diupload
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('excel')) {
+                //fetch data upload
+                $file   = $this->upload->data();
+
+                $reader = ReaderEntityFactory::createXLSXReader(); //buat xlsx reader
+                $reader->open('./temp_doc/' . $file['file_name']); //open file xlsx yang baru saja diunggah
+
+                //looping pembacaan sheet dalam file        
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    $numRow = 1;
+
+                    //siapkan variabel array kosong untuk menampung variabel array data
+                    $save   = array();
+
+                    //looping pembacaan row dalam sheet
+                    foreach ($sheet->getRowIterator() as $row) {
+
+                        if ($numRow > 1) {
+                            //ambil cell
+                            $cells = $row->getCells();
+
+                            $data = array(
+                                'pelajaran'     => $cells[0],
+                                'nama_pelajaran'=> $cells[1]
+                            );
+
+                            //tambahkan array $data ke $save
+                            array_push($save, $data);
+                        }
+
+                        $numRow++;
+                    }
+
+                    //simpan data ke database
+                    $this->Import_model->pelajaran($save);
+
+                    //tutup spout reader
+                    $reader->close();
+
+                    //hapus file yang sudah diupload
+                    unlink('./temp_doc/' . $file['file_name']);
+
+                    //tampilkan pesan success dan redirect ulang ke index controller import
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> berhasil mengimport data :)
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>');
+                    redirect('admin/jadwal_pelajaran');
+                }
+            } else {
+                //tampilkan pesan error jika file gagal diupload
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> ' . $this->upload->display_errors() . '
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>');
+                redirect('admin/jadwal_pelajaran');
+            }
+        }
+    }
+
 
 
     public function daftar_absen()
@@ -436,59 +1167,6 @@ class Admin extends CI_Controller
         $this->load->view('admin/absen', $data);
         $this->load->view('template/footer_admin');
     }
-
-
-    public function kelas()
-    {
-
-        $data['menu'] = 'menu-3';
-        $data['title'] = 'Data kelas';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $this->db->order_by('id', 'desc');
-        $data['kelas'] =  $this->db->get('data_kelas')->result_array();
-        $data['pendidikan'] =  $this->db->get('data_pendidikan')->result_array();
-
-        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/kelas', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-            $nama = $this->input->post('kelas');
-
-            $cek = $this->db->get_where('data_kelas', ['nama' => $nama])->row_array();
-            $cek_rib = $this->db->get_where('data_pendidikan', ['id' => $cek['id_pend']])->row_array();
-
-            if ($cek['kelas']) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Data Kelas <strong>' . $nama . '</strong> sudah ada di Pendidikan <strong>' . $cek_rib['nama'] . '</strong>.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>');
-                redirect('admin/kelas');
-            } else {
-                $data = [
-                    'nama'   => $nama,
-                    'id_pend'  => $this->input->post('pendidikan')
-                ];
-                $this->db->insert('data_kelas', $data);
-                $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data Kelas <strong>' . $nama . '</strong> berhasil ditambahkan :)
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>');
-                redirect('admin/kelas');
-            }
-        }
-    }
-
 
     public function pelanggaran()
     {
@@ -922,7 +1600,6 @@ class Admin extends CI_Controller
     }
 
 
-
     public function view_kelas()
     {
         $data['menu'] = 'menu-2';
@@ -1078,7 +1755,6 @@ class Admin extends CI_Controller
         }
     }
 
-
     public function balas_konseling()
     {
         $id_konseling = $this->input->get('id');
@@ -1170,72 +1846,6 @@ class Admin extends CI_Controller
         }
     }
 
-
-    public function karyawan()
-    {
-        $data['menu'] = 'menu-9';
-        $data['title'] = 'Data Karyawan';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $this->db->where('role_id !=', 1);
-        $data['karyawan'] =  $this->db->get('karyawan')->result_array();
-
-        $data['kelas'] = $this->db->get("data_kelas")->result_array();
-        $data['divisi'] = $this->db->get("data_divisi")->result_array();
-        $data['pendidikan'] = $this->db->get("data_pendidikan")->result_array();
-
-        $this->db->order_by('nama', 'asc');
-        $data['prov'] = $this->db->get('provinsi')->result_array();
-        $data['kab'] = $this->db->get('kabupaten')->result_array();
-
-        $this->form_validation->set_rules('nama', 'Nama Karyawan', 'required');
-        $this->form_validation->set_rules('email', 'Email Karyawan', 'required');
-        $this->form_validation->set_rules('password', 'Pasword Karyawan', 'required');
-        $this->form_validation->set_rules('alamat', 'Alamat Karyawan', 'required');
-        $this->form_validation->set_rules('telp', 'Nomor Hp', 'required');
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/karyawan', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-            $tgl = date('Y-m-d');
-            $nama = $this->input->post('nama');
-            $data = [
-                'id_fingerprint' => $this->input->post('id_fp'),
-                'nama' => $nama,
-                'email' => $this->input->post('email'),
-                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-                'alamat' => $this->input->post('alamat'),
-                'telp' => $this->input->post('telp'),
-                'id_divisi' => $this->input->post('divisi'),
-                'intensif' => $this->input->post('intensif'),
-                'jam_mengajar' => $this->input->post('jam_mengajar'),
-                'nominal_jam' => $this->input->post('nominal_jam'),
-                'bpjs' => $this->input->post('bpjs'),
-                'koperasi' => $this->input->post('koperasi'),
-                'simpanan' => $this->input->post('simpanan'),
-                'tabungan' => $this->input->post('tabungan'),
-                'id_pend' => $this->input->post('pendidikan'),
-                'id_kelas' => $this->input->post('kelas'),
-                'role_id' => $this->input->post('level'),
-                'status' => '1',
-                'date_created' => $tgl
-            ];
-
-            $this->db->insert('karyawan', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-           Data karyawan <strong>' . $nama . '</strong> berhasil ditambahkan!
-           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-          </div>');
-            redirect('admin/karyawan');
-        }
-    }
 
 
     public function tagline()
@@ -2291,7 +2901,7 @@ class Admin extends CI_Controller
         if ($segmen == 'ppdb') {
             $get    = $this->Export_model->getPPDB();
         } else {
-            $get    = $this->Export_model->getAll();
+            $get    = $this->Export_model->getPelajaran();
         }
         //validasi jumlah data
         if ($get->num_rows() > 0) {
@@ -2300,34 +2910,14 @@ class Admin extends CI_Controller
             if ($segmen == 'ppdb') {
                 $writer->openToBrowser("data_ppdb.xlsx");
             } else {
-                $writer->openToBrowser("data_siswa.xlsx");
+                $writer->openToBrowser("data_pelajaran.xlsx");
             }
 
             //silahkan sobat sesuaikan dengan data yang ingin sobat tampilkan
             $header = [
                 WriterEntityFactory::createCell('No'),
-                WriterEntityFactory::createCell('Nik'),
-                WriterEntityFactory::createCell('Nis'),
-                WriterEntityFactory::createCell('Nama'),
-                WriterEntityFactory::createCell('Email'),
-                WriterEntityFactory::createCell('No Hp'),
-                WriterEntityFactory::createCell('Jenis Kelamin'),
-                WriterEntityFactory::createCell('Tanggal lahir'),
-                WriterEntityFactory::createCell('Provinsi'),
-                WriterEntityFactory::createCell('Kabupaten'),
-                WriterEntityFactory::createCell('Alamat'),
-                WriterEntityFactory::createCell('Nama Ayah'),
-                WriterEntityFactory::createCell('Nama Ibu'),
-                WriterEntityFactory::createCell('Pek Ayah'),
-                WriterEntityFactory::createCell('Pek Ibu'),
-                WriterEntityFactory::createCell('Nama Wali'),
-                WriterEntityFactory::createCell('Pek Wali'),
-                WriterEntityFactory::createCell('Peng Ortu/Wali'),
-                WriterEntityFactory::createCell('Nomor telepon'),
-                WriterEntityFactory::createCell('Tahun Masuk'),
-                WriterEntityFactory::createCell('Sekolah Asal'),
-                WriterEntityFactory::createCell('Kelas'),
-                WriterEntityFactory::createCell('Diniyah')
+                WriterEntityFactory::createCell('Kode Pelajaran'),
+                WriterEntityFactory::createCell('Nama Pelajaran')
             ];
 
             /** Tambah row satu kali untuk header */
@@ -2341,33 +2931,13 @@ class Admin extends CI_Controller
             foreach ($get->result() as $key) {
                 //masukkan data dari database ke variabel array
                 //silahkan sobat sesuaikan dengan nama field pada tabel database
-                $siswa    = array(
+                $pelajaran    = array(
                     WriterEntityFactory::createCell($no++),
-                    WriterEntityFactory::createCell($key->nis),
-                    WriterEntityFactory::createCell($key->nik),
-                    WriterEntityFactory::createCell($key->nama),
-                    WriterEntityFactory::createCell($key->email),
-                    WriterEntityFactory::createCell($key->no_hp),
-                    WriterEntityFactory::createCell($key->jk),
-                    WriterEntityFactory::createCell($key->ttl),
-                    WriterEntityFactory::createCell($key->prov),
-                    WriterEntityFactory::createCell($key->kab),
-                    WriterEntityFactory::createCell($key->alamat),
-                    WriterEntityFactory::createCell($key->nama_ayah),
-                    WriterEntityFactory::createCell($key->nama_ibu),
-                    WriterEntityFactory::createCell($key->pek_ayah),
-                    WriterEntityFactory::createCell($key->pek_ibu),
-                    WriterEntityFactory::createCell($key->nama_wali),
-                    WriterEntityFactory::createCell($key->pek_wali),
-                    WriterEntityFactory::createCell($key->peng_ortu),
-                    WriterEntityFactory::createCell($key->no_telp),
-                    WriterEntityFactory::createCell($key->thn_msk),
-                    WriterEntityFactory::createCell($key->sekolah_asal),
-                    WriterEntityFactory::createCell($key->kelas),
-                    WriterEntityFactory::createCell($key->diniyah),
+                    WriterEntityFactory::createCell($key->pelajaran),
+                    WriterEntityFactory::createCell($key->nama_pelajaran),
                 );
 
-                array_push($data, WriterEntityFactory::createRow($siswa)); //masukkan variabel array siswa ke variabel array data
+                array_push($data, WriterEntityFactory::createRow($pelajaran)); //masukkan variabel array siswa ke variabel array data
             }
 
             $writer->addRows($data); // tambahkan row untuk data siswa
