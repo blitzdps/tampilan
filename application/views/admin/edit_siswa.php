@@ -255,7 +255,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="status" class="col-form-label">Status :</label>
+                                    <label for="status" class="col-form-label">Status : </label>
                                     <select class="form-control" id="status" name="status">
                                         <?php if ($siswa['status'] == '1') : ?>
                                             <option value="1">
@@ -263,6 +263,11 @@
                                             </option>
                                             <option value="0">Tidak Aktif</option>
                                         <?php elseif ($siswa['status'] == '0') : ?>
+                                            <option value="0">
+                                                Tidak Aktif (Terpilih)
+                                            </option>
+                                            <option value="1">Aktif</option>
+                                        <?php elseif ($siswa['status'] == '2') : ?>
                                             <option value="0">
                                                 Tidak Aktif (Terpilih)
                                             </option>

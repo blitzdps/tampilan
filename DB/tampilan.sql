@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.7
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Waktu pembuatan: 14 Jan 2022 pada 16.35
--- Versi server: 10.2.41-MariaDB-cll-lve
--- Versi PHP: 7.3.33
+-- Host: 127.0.0.1
+-- Generation Time: Aug 21, 2022 at 05:18 PM
+-- Server version: 10.3.16-MariaDB
+-- PHP Version: 7.1.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `rout5833_db`
+-- Database: `tampilan`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `about`
+-- Table structure for table `about`
 --
 
 CREATE TABLE `about` (
@@ -37,7 +37,7 @@ CREATE TABLE `about` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `about`
+-- Dumping data for table `about`
 --
 
 INSERT INTO `about` (`id`, `about`, `visi`, `misi`, `img`) VALUES
@@ -46,39 +46,7 @@ INSERT INTO `about` (`id`, `about`, `visi`, `misi`, `img`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `absen`
---
-
-CREATE TABLE `absen` (
-  `id` int(11) NOT NULL,
-  `id_siswa` int(11) NOT NULL,
-  `tgl` date NOT NULL,
-  `waktu` time NOT NULL,
-  `id_kelas` int(11) NOT NULL,
-  `status` enum('Belum Absen','Hadir','Tidak Hadir','Izin') NOT NULL,
-  `role_absen` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `absen_pegawai`
---
-
-CREATE TABLE `absen_pegawai` (
-  `id` int(11) NOT NULL,
-  `id_peng` int(11) NOT NULL,
-  `tgl` date NOT NULL,
-  `jam_masuk` time NOT NULL,
-  `sum_jam` int(11) NOT NULL,
-  `status` int(11) NOT NULL,
-  `role_absen` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `acara`
+-- Table structure for table `acara`
 --
 
 CREATE TABLE `acara` (
@@ -94,7 +62,7 @@ CREATE TABLE `acara` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `acara`
+-- Dumping data for table `acara`
 --
 
 INSERT INTO `acara` (`id`, `judul`, `deskripsi`, `id_kat`, `img`, `tempat`, `jam`, `tgl`, `id_peng`) VALUES
@@ -108,104 +76,7 @@ INSERT INTO `acara` (`id`, `judul`, `deskripsi`, `id_kat`, `img`, `tempat`, `jam
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `balas_konseling`
---
-
-CREATE TABLE `balas_konseling` (
-  `id` int(11) NOT NULL,
-  `pengirim` enum('Karyawan','siswa') NOT NULL,
-  `id_peng` int(11) NOT NULL,
-  `id_siswa` int(11) NOT NULL,
-  `balasan` text NOT NULL,
-  `tgl` date NOT NULL,
-  `waktu` time NOT NULL,
-  `role_konseling` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `daftar_absen`
---
-
-CREATE TABLE `daftar_absen` (
-  `id` int(11) NOT NULL,
-  `id_pend` int(11) NOT NULL,
-  `id_kelas` varchar(250) NOT NULL,
-  `tgl` date NOT NULL,
-  `status` enum('Selesai','Belum Selesai') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `daftar_absen`
---
-
-INSERT INTO `daftar_absen` (`id`, `id_pend`, `id_kelas`, `tgl`, `status`) VALUES
-(1, 3, '11', '2022-01-10', 'Belum Selesai');
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `data_absen_pegawai`
---
-
-CREATE TABLE `data_absen_pegawai` (
-  `id` int(11) NOT NULL,
-  `tgl` date NOT NULL,
-  `status` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `data_cicilan`
---
-
-CREATE TABLE `data_cicilan` (
-  `id` int(11) NOT NULL,
-  `nama` varchar(255) NOT NULL,
-  `id_peng` int(11) NOT NULL,
-  `nominal` int(11) NOT NULL,
-  `tenor` int(11) NOT NULL,
-  `status` enum('Belum Lunas','Lunas') NOT NULL,
-  `tgl_lunas` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `data_cicilan`
---
-
-INSERT INTO `data_cicilan` (`id`, `nama`, `id_peng`, `nominal`, `tenor`, `status`, `tgl_lunas`) VALUES
-(1, 'Cicilan 1', 2, 12000, -1, 'Lunas', '2021-07-26'),
-(2, 'Cicilan 2', 2, 15000, 9, 'Belum Lunas', '0000-00-00');
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `data_divisi`
---
-
-CREATE TABLE `data_divisi` (
-  `id` int(11) NOT NULL,
-  `nama` varchar(255) NOT NULL,
-  `gaji` int(11) NOT NULL,
-  `tunjangan` int(11) NOT NULL,
-  `role_id` int(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `data_divisi`
---
-
-INSERT INTO `data_divisi` (`id`, `nama`, `gaji`, `tunjangan`, `role_id`) VALUES
-(1, 'Guru', 150000, 200000, 2),
-(17, 'Karyawan', 100000, 100000, 3),
-(18, 'Demo', 150000, 150000, 3);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `data_kelas`
+-- Table structure for table `data_kelas`
 --
 
 CREATE TABLE `data_kelas` (
@@ -216,7 +87,7 @@ CREATE TABLE `data_kelas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `data_kelas`
+-- Dumping data for table `data_kelas`
 --
 
 INSERT INTO `data_kelas` (`id`, `nama`, `id_pend`, `id_peng`) VALUES
@@ -235,64 +106,7 @@ INSERT INTO `data_kelas` (`id`, `nama`, `id_pend`, `id_peng`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `data_kursi`
---
-
-CREATE TABLE `data_kursi` (
-  `id` int(11) NOT NULL,
-  `nama` varchar(250) NOT NULL,
-  `tipe` enum('Kursi A','Kursi B') NOT NULL,
-  `id_kelas` int(11) NOT NULL,
-  `id_siswa` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `data_kursi`
---
-
-INSERT INTO `data_kursi` (`id`, `nama`, `tipe`, `id_kelas`, `id_siswa`) VALUES
-(43, 'B1', 'Kursi B', 1, 0),
-(44, 'B2', 'Kursi B', 1, 0),
-(45, 'A3', 'Kursi A', 1, 0),
-(46, 'A2', 'Kursi A', 2, 0),
-(47, 'A1', 'Kursi A', 2, 0),
-(48, 'A2', 'Kursi A', 3, 0),
-(49, 'A3', 'Kursi A', 1, 0),
-(50, 'A4', 'Kursi A', 1, 0),
-(51, 'A5', 'Kursi A', 1, 0),
-(52, 'A6', 'Kursi A', 1, 0),
-(53, 'A7', 'Kursi A', 1, 0),
-(54, 'A8', 'Kursi A', 1, 0),
-(55, 'A9', 'Kursi A', 1, 0),
-(56, 'A10', 'Kursi A', 1, 0),
-(57, 'A11', 'Kursi A', 1, 0),
-(58, 'A12', 'Kursi A', 1, 0),
-(59, 'A13', 'Kursi A', 1, 0),
-(60, 'A14', 'Kursi A', 1, 0),
-(62, 'B16', 'Kursi B', 1, 0),
-(63, 'B17', 'Kursi B', 1, 0),
-(64, 'B18', 'Kursi B', 1, 0),
-(65, 'B19', 'Kursi B', 1, 0),
-(66, 'B20', 'Kursi B', 1, 0),
-(67, 'B21', 'Kursi B', 1, 0),
-(68, 'B22', 'Kursi B', 1, 0),
-(69, 'B23', 'Kursi B', 1, 0),
-(70, 'B24', 'Kursi B', 1, 0),
-(71, 'B25', 'Kursi B', 1, 0),
-(74, 'A2', 'Kursi A', 4, 0),
-(75, 'A1', 'Kursi A', 4, 0),
-(77, 'B1', 'Kursi B', 2, 0),
-(79, 'A1', 'Kursi A', 10, 0),
-(81, 'B2', 'Kursi B', 2, 0),
-(82, 'AA1', 'Kursi A', 1, 0),
-(83, 'B3', 'Kursi B', 10, 0),
-(84, 'B4', 'Kursi B', 10, 0),
-(85, 'Ax2', 'Kursi A', 1, 0);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `data_pelanggaran`
+-- Table structure for table `data_pelanggaran`
 --
 
 CREATE TABLE `data_pelanggaran` (
@@ -304,7 +118,7 @@ CREATE TABLE `data_pelanggaran` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `data_pelanggaran`
+-- Dumping data for table `data_pelanggaran`
 --
 
 INSERT INTO `data_pelanggaran` (`id`, `kode`, `nama`, `point`, `jumlah`) VALUES
@@ -330,7 +144,7 @@ INSERT INTO `data_pelanggaran` (`id`, `kode`, `nama`, `point`, `jumlah`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `data_pendidikan`
+-- Table structure for table `data_pendidikan`
 --
 
 CREATE TABLE `data_pendidikan` (
@@ -339,40 +153,18 @@ CREATE TABLE `data_pendidikan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `data_pendidikan`
+-- Dumping data for table `data_pendidikan`
 --
 
 INSERT INTO `data_pendidikan` (`id`, `nama`) VALUES
 (1, 'SD'),
 (2, 'SMPIT'),
-(3, 'MTs');
+(5, 'MTS');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `data_perizinan`
---
-
-CREATE TABLE `data_perizinan` (
-  `id` int(11) NOT NULL,
-  `nama` varchar(150) NOT NULL,
-  `jumlah` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `data_perizinan`
---
-
-INSERT INTO `data_perizinan` (`id`, `nama`, `jumlah`) VALUES
-(1, 'Pulang', 0),
-(2, 'Ke pasar', 1),
-(9, 'Sakit', 1),
-(10, 'Acara', 1);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `email_sender`
+-- Table structure for table `email_sender`
 --
 
 CREATE TABLE `email_sender` (
@@ -386,7 +178,7 @@ CREATE TABLE `email_sender` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `email_sender`
+-- Dumping data for table `email_sender`
 --
 
 INSERT INTO `email_sender` (`id`, `protocol`, `host`, `port`, `email`, `password`, `charset`) VALUES
@@ -395,7 +187,7 @@ INSERT INTO `email_sender` (`id`, `protocol`, `host`, `port`, `email`, `password
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `gallery`
+-- Table structure for table `gallery`
 --
 
 CREATE TABLE `gallery` (
@@ -412,7 +204,7 @@ CREATE TABLE `gallery` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `gallery`
+-- Dumping data for table `gallery`
 --
 
 INSERT INTO `gallery` (`id`, `nama`, `deskripsi`, `id_kat`, `img`, `img1`, `img2`, `img3`, `id_peng`, `tgl`) VALUES
@@ -426,7 +218,7 @@ INSERT INTO `gallery` (`id`, `nama`, `deskripsi`, `id_kat`, `img`, `img1`, `img2
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `home`
+-- Table structure for table `home`
 --
 
 CREATE TABLE `home` (
@@ -439,7 +231,7 @@ CREATE TABLE `home` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `home`
+-- Dumping data for table `home`
 --
 
 INSERT INTO `home` (`id`, `judul`, `isi`, `tombol`, `link`, `img`) VALUES
@@ -448,7 +240,7 @@ INSERT INTO `home` (`id`, `judul`, `isi`, `tombol`, `link`, `img`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kabupaten`
+-- Table structure for table `kabupaten`
 --
 
 CREATE TABLE `kabupaten` (
@@ -458,7 +250,7 @@ CREATE TABLE `kabupaten` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `kabupaten`
+-- Dumping data for table `kabupaten`
 --
 
 INSERT INTO `kabupaten` (`id_kab`, `id_prov`, `nama_kab`) VALUES
@@ -955,7 +747,7 @@ INSERT INTO `kabupaten` (`id_kab`, `id_prov`, `nama_kab`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `karyawan`
+-- Table structure for table `karyawan`
 --
 
 CREATE TABLE `karyawan` (
@@ -986,7 +778,7 @@ CREATE TABLE `karyawan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
--- Dumping data untuk tabel `karyawan`
+-- Dumping data for table `karyawan`
 --
 
 INSERT INTO `karyawan` (`id`, `id_fingerprint`, `nik`, `nama`, `jk`, `ttl`, `email`, `password`, `alamat`, `telp`, `id_divisi`, `dept`, `intensif`, `jam_mengajar`, `nominal_jam`, `bpjs`, `koperasi`, `simpanan`, `tabungan`, `id_pend`, `id_kelas`, `role_id`, `status`, `date_created`) VALUES
@@ -996,7 +788,7 @@ INSERT INTO `karyawan` (`id`, `id_fingerprint`, `nik`, `nama`, `jk`, `ttl`, `ema
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kategori_acara`
+-- Table structure for table `kategori_acara`
 --
 
 CREATE TABLE `kategori_acara` (
@@ -1006,7 +798,7 @@ CREATE TABLE `kategori_acara` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `kategori_acara`
+-- Dumping data for table `kategori_acara`
 --
 
 INSERT INTO `kategori_acara` (`id`, `nama`, `uniq`) VALUES
@@ -1016,7 +808,7 @@ INSERT INTO `kategori_acara` (`id`, `nama`, `uniq`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kategori_gallery`
+-- Table structure for table `kategori_gallery`
 --
 
 CREATE TABLE `kategori_gallery` (
@@ -1026,7 +818,7 @@ CREATE TABLE `kategori_gallery` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `kategori_gallery`
+-- Dumping data for table `kategori_gallery`
 --
 
 INSERT INTO `kategori_gallery` (`id`, `nama`, `uniq`) VALUES
@@ -1036,7 +828,7 @@ INSERT INTO `kategori_gallery` (`id`, `nama`, `uniq`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `konseling`
+-- Table structure for table `konseling`
 --
 
 CREATE TABLE `konseling` (
@@ -1056,7 +848,7 @@ CREATE TABLE `konseling` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kontak`
+-- Table structure for table `kontak`
 --
 
 CREATE TABLE `kontak` (
@@ -1070,7 +862,7 @@ CREATE TABLE `kontak` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `kontak`
+-- Dumping data for table `kontak`
 --
 
 INSERT INTO `kontak` (`id`, `nama`, `email`, `subjek`, `pesan`, `tgl`, `status`) VALUES
@@ -1080,7 +872,7 @@ INSERT INTO `kontak` (`id`, `nama`, `email`, `subjek`, `pesan`, `tgl`, `status`)
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pelanggaran`
+-- Table structure for table `pelanggaran`
 --
 
 CREATE TABLE `pelanggaran` (
@@ -1095,29 +887,7 @@ CREATE TABLE `pelanggaran` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `penggajian`
---
-
-CREATE TABLE `penggajian` (
-  `id` int(11) NOT NULL,
-  `id_peng` int(11) NOT NULL,
-  `id_divisi` int(11) NOT NULL,
-  `tgl_awal` date NOT NULL,
-  `tgl_akhir` date NOT NULL,
-  `status` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `penggajian`
---
-
-INSERT INTO `penggajian` (`id`, `id_peng`, `id_divisi`, `tgl_awal`, `tgl_akhir`, `status`) VALUES
-(12, 2, 1, '2022-01-01', '2022-01-31', 0);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `perizinan`
+-- Table structure for table `perizinan`
 --
 
 CREATE TABLE `perizinan` (
@@ -1135,7 +905,7 @@ CREATE TABLE `perizinan` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ppdb`
+-- Table structure for table `ppdb`
 --
 
 CREATE TABLE `ppdb` (
@@ -1174,7 +944,7 @@ CREATE TABLE `ppdb` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `ppdb`
+-- Dumping data for table `ppdb`
 --
 
 INSERT INTO `ppdb` (`id`, `no_daftar`, `nik`, `nis`, `nama`, `email`, `no_hp`, `password`, `jk`, `ttl`, `prov`, `kab`, `alamat`, `nama_ayah`, `nama_ibu`, `pek_ayah`, `pek_ibu`, `nama_wali`, `pek_wali`, `peng_ortu`, `no_telp`, `thn_msk`, `sekolah_asal`, `kelas`, `diniyah`, `img_siswa`, `img_kk`, `img_ijazah`, `img_ktp`, `status`, `alasan`, `date_created`) VALUES
@@ -1184,7 +954,7 @@ INSERT INTO `ppdb` (`id`, `no_daftar`, `nik`, `nis`, `nama`, `email`, `no_hp`, `
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `provinsi`
+-- Table structure for table `provinsi`
 --
 
 CREATE TABLE `provinsi` (
@@ -1193,7 +963,7 @@ CREATE TABLE `provinsi` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `provinsi`
+-- Dumping data for table `provinsi`
 --
 
 INSERT INTO `provinsi` (`id_prov`, `nama`) VALUES
@@ -1235,7 +1005,7 @@ INSERT INTO `provinsi` (`id_prov`, `nama`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `siswa`
+-- Table structure for table `siswa`
 --
 
 CREATE TABLE `siswa` (
@@ -1276,7 +1046,7 @@ CREATE TABLE `siswa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `siswa`
+-- Dumping data for table `siswa`
 --
 
 INSERT INTO `siswa` (`id`, `point`, `nik`, `nis`, `nama`, `email`, `no_hp`, `password`, `jk`, `ttl`, `prov`, `kab`, `alamat`, `nama_ayah`, `nama_ibu`, `pek_ayah`, `pek_ibu`, `nama_wali`, `pek_wali`, `peng_ortu`, `no_telp`, `thn_msk`, `sekolah_asal`, `kelas`, `diniyah`, `img_siswa`, `img_kk`, `img_ijazah`, `img_ktp`, `id_pend`, `id_kelas`, `status`, `date_created`, `role_id`) VALUES
@@ -1285,7 +1055,7 @@ INSERT INTO `siswa` (`id`, `point`, `nik`, `nis`, `nama`, `email`, `no_hp`, `pas
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tagline`
+-- Table structure for table `tagline`
 --
 
 CREATE TABLE `tagline` (
@@ -1296,7 +1066,7 @@ CREATE TABLE `tagline` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `tagline`
+-- Dumping data for table `tagline`
 --
 
 INSERT INTO `tagline` (`id`, `nama`, `deskripsi`, `img`) VALUES
@@ -1307,7 +1077,245 @@ INSERT INTO `tagline` (`id`, `nama`, `deskripsi`, `img`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `website`
+-- Table structure for table `tbl_guru`
+--
+
+CREATE TABLE `tbl_guru` (
+  `id_guru` int(3) NOT NULL,
+  `nip` varchar(20) NOT NULL,
+  `nama_guru` varchar(100) NOT NULL,
+  `alamat` varchar(100) NOT NULL,
+  `no_telp` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_guru`
+--
+
+INSERT INTO `tbl_guru` (`id_guru`, `nip`, `nama_guru`, `alamat`, `no_telp`, `password`) VALUES
+(45, '132392112006', 'Achmad Sofyan Abdurachman , S.Ag', 'Kelapa Lima', '081236770614', 'sofyan'),
+(46, '071981127051', 'Fatmah ,S.Pd', 'alak', '081232123456', 'fatimah'),
+(47, '071981127056', 'Sudirman Pandai', 'oebobo', '082234212231', 'sudirman'),
+(48, '130282195025', 'Sri Dewi Sartika Bara , S.Pd', 'walikota', '08123556987', 'dewi'),
+(49, '140282134113', 'Sholihin , S.Pd', 'alak', '081232123456', 'sholihin'),
+(50, '140282134114', 'Rahmawati H. Susanti , S.Pd', 'bonipoi', '081232123456', 'rahmawati'),
+(51, '197008242001121008', 'Sebabung , S.Pd', 'alak', '081232123456', 'sebabung'),
+(52, '198202042006042003', 'Nur Afni , S.Pd', 'nunhila', '082234212231', 'nur'),
+(53, '140282134115', 'Samsul Rizal , A.Md', 'alak', '082234212231', 'rizal'),
+(54, '140282134116', 'Shaiful , S.Pd', 'alak', '08123556987', 'shaiful');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_jadwal_pelajaran`
+--
+
+CREATE TABLE `tbl_jadwal_pelajaran` (
+  `id_jadwal_pelajaran` int(6) NOT NULL,
+  `id_kelas` int(6) NOT NULL,
+  `id_pelajaran` int(6) NOT NULL,
+  `id_guru` int(6) NOT NULL,
+  `hari` int(1) NOT NULL,
+  `jam_mulai` time NOT NULL,
+  `jam_selesai` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_jadwal_pelajaran`
+--
+
+INSERT INTO `tbl_jadwal_pelajaran` (`id_jadwal_pelajaran`, `id_kelas`, `id_pelajaran`, `id_guru`, `hari`, `jam_mulai`, `jam_selesai`) VALUES
+(16, 72, 36, 45, 1, '07:00:00', '09:00:00'),
+(17, 72, 34, 46, 1, '09:30:00', '11:30:00'),
+(18, 72, 37, 47, 2, '07:00:00', '09:00:00'),
+(19, 72, 38, 48, 2, '09:30:00', '11:30:00'),
+(20, 72, 39, 49, 3, '07:00:00', '09:00:00'),
+(21, 72, 40, 50, 3, '09:30:00', '11:30:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_jadwal_ujian`
+--
+
+CREATE TABLE `tbl_jadwal_ujian` (
+  `id_jadwal_ujian` int(6) NOT NULL,
+  `id_pelajaran` int(6) NOT NULL,
+  `tanggal` date NOT NULL,
+  `jam_mulai` time NOT NULL,
+  `jam_selesai` time NOT NULL,
+  `keterangan` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_jadwal_ujian`
+--
+
+INSERT INTO `tbl_jadwal_ujian` (`id_jadwal_ujian`, `id_pelajaran`, `tanggal`, `jam_mulai`, `jam_selesai`, `keterangan`) VALUES
+(16, 36, '2021-06-21', '07:00:00', '09:00:00', 'Ujian Akhir Semester'),
+(17, 34, '2021-06-21', '09:30:00', '11:30:00', 'Ujian Akhir Semester'),
+(18, 37, '2021-06-22', '07:00:00', '09:00:00', 'Ujian Akhir Semester'),
+(19, 38, '2021-06-22', '09:30:00', '11:30:00', 'Ujian Akhir Semester'),
+(20, 39, '2021-06-23', '07:00:00', '09:00:00', 'Ujian Akhir Semester'),
+(21, 40, '2021-06-23', '09:30:00', '11:30:00', 'Ujian Akhir Semester'),
+(22, 41, '2021-06-24', '07:00:00', '09:00:00', 'Ujian Akhir Semester');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_kelas`
+--
+
+CREATE TABLE `tbl_kelas` (
+  `id_kelas` int(6) NOT NULL,
+  `kode_kelas` varchar(100) NOT NULL,
+  `kelas` varchar(100) NOT NULL,
+  `sub_kelas` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_kelas`
+--
+
+INSERT INTO `tbl_kelas` (`id_kelas`, `kode_kelas`, `kelas`, `sub_kelas`) VALUES
+(72, '1A', '1', 'A'),
+(73, '1B', '1', 'B'),
+(74, '2A', '2', 'A'),
+(75, '2B', '2', 'B'),
+(78, '3A', '3', 'A'),
+(79, '4A', '4', 'A'),
+(80, '4B', '4', 'B'),
+(81, '3B', '3', 'B'),
+(82, '5A', '5', 'A'),
+(83, '5B', '5', 'B'),
+(84, '6A', '6', 'A'),
+(85, '6B', '6', 'B');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_nilai`
+--
+
+CREATE TABLE `tbl_nilai` (
+  `id_nilai` int(6) NOT NULL,
+  `id_siswa` int(15) NOT NULL,
+  `id_pelajaran` int(6) NOT NULL,
+  `nilai` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_nilai`
+--
+
+INSERT INTO `tbl_nilai` (`id_nilai`, `id_siswa`, `id_pelajaran`, `nilai`) VALUES
+(3, 47, 38, 85),
+(4, 47, 36, 80),
+(5, 47, 34, 80),
+(6, 47, 37, 90),
+(7, 47, 39, 90),
+(8, 47, 40, 80),
+(9, 47, 41, 95),
+(10, 47, 42, 85);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_pelajaran`
+--
+
+CREATE TABLE `tbl_pelajaran` (
+  `id_pelajaran` int(6) NOT NULL,
+  `pelajaran` varchar(50) NOT NULL,
+  `nama_pelajaran` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_pelajaran`
+--
+
+INSERT INTO `tbl_pelajaran` (`id_pelajaran`, `pelajaran`, `nama_pelajaran`) VALUES
+(34, 'FIKIH', 'Fikih'),
+(36, 'SKI', 'Sejarah Kebudayaan Islam'),
+(37, 'AL', 'Al-Quran Hadis'),
+(38, 'AKIDAH', 'Akidah Akhlak'),
+(39, 'ARAB', 'Bahasa Arab'),
+(40, 'PKN', 'Pendidikan Kewarganegaraan'),
+(41, 'BINDO', 'Bahasa Indonesia'),
+(42, 'MTK', 'Matematika'),
+(43, 'SBDP', 'Seni Budaya Dan Prakarya'),
+(46, 'KOM', 'Komputer'),
+(47, 'BING', 'Bahasa Inggris');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_siswa`
+--
+
+CREATE TABLE `tbl_siswa` (
+  `id_siswa` int(15) NOT NULL,
+  `nis` varchar(100) NOT NULL,
+  `nama_siswa` varchar(100) NOT NULL,
+  `id_kelas` int(6) NOT NULL,
+  `no_telp` varchar(15) NOT NULL,
+  `alamat` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_siswa`
+--
+
+INSERT INTO `tbl_siswa` (`id_siswa`, `nis`, `nama_siswa`, `id_kelas`, `no_telp`, `alamat`, `password`) VALUES
+(47, '3314010307140003', 'Abid Aqila Pranaja', 72, '081232123456', 'Jl. Kecipir Bakunase RT 012/RW 004', 'abid'),
+(48, '5101011308130002', 'Abidzhar Leonel Al Farizi Waso', 74, '81123456789', 'Jl. Uki Ta\'u Gang II No 2 Liliba', 'abidzhar'),
+(49, '5301240306140001', 'Abriezham Shadied Al\'fath', 72, '82736437272', 'Jl. Soeprapto No 28 Oebobo', 'abriezham'),
+(50, '3308185705140002', 'Adiba Shakila Wahyudini', 72, '081263940938', 'Jl. Sukun 2 Oepura', 'adiba'),
+(51, '3322116201140003', 'Afifa Fitiya', 72, '081738362838', 'Jl. Kemiri No 7 Naikolan', 'afifa'),
+(52, '3524090505140001', 'Ahmad Aidil Al-Farizi', 72, '81273617394', 'Jl. Bundaran PU TDM 5', 'ahmad'),
+(53, '5371036409130002', 'Ainiya Faida Azmi', 72, '85172637363', 'Jl. Tuak Daun Merah I Oebufu', 'ainiya'),
+(54, '5371044512120003', 'Aisyahniza Kharizma Dunya Hongri', 72, '81625983782', 'Jl. Kayu Putih ', 'aisyahniza'),
+(55, '1106151412130001', 'Alief Ardianto Lado', 72, '082783909363', 'Jl. Jeruk No 17A Oepura', 'alief1'),
+(56, '5371055504140001', 'Alysa Putri Sakinah', 72, '81212098877', 'Jl. Kenari Naikoten I', 'alysa'),
+(57, '5371046210130003', 'Andhira Hastuti Alawia Ape', 72, '82098083789', 'Jl. Sapta Marga Asten Kuanino', 'andhira'),
+(58, '5371054210130001', 'Butsaina Iftitah Naila Adang', 72, '81092890645', 'Jl. Cemara No 1 Bakunase', 'butsaina'),
+(59, '5371066608130001', 'Dhita Akbar Aidil Zahra', 72, '81274637469', 'Jl. Naimata', 'dhita'),
+(60, '5371042605140001', 'Dzaki Al Mair', 72, '82634636364', 'Jl. Sejahtera Oetete', 'dzaki'),
+(61, '5371042107130001', 'Farhan Ramadhan', 72, '85163834638', 'Jl. Kayu Putih ', 'farhan'),
+(62, '5371041304140002', 'Furqaan Hamdani Azis', 72, '81238373728', 'Jl. Hati Suci No 9 Oebobo', 'furqaan'),
+(63, '5371044406140001', 'Garini Ariqa Widjayanti', 72, '81292938293', 'Jl Nangka', 'garini'),
+(64, '5371010607140002', 'Hafidz Rizky Ramadhan', 72, '81273635426', 'Jl. Nangka', 'hafidz'),
+(65, '7313054302130001', 'Haisah ', 72, '81232123456', 'Jl Kenari Pasar Inpres', 'haisah'),
+(66, '5371021106130002', 'Khalik Rizky Pratama', 72, '81123456789', 'Jl Oebonik Sikumana', 'khalik'),
+(67, '5371024607140001', 'Laila Khaliqa Ramadhani ', 72, '82736437272', 'Jl Kejora Oebufu', 'laila'),
+(68, '5371025101140001', 'Maulida Azhaa Ainaya Abdurachman', 72, '81263940938', 'Jl Dirgantara Farmasi', 'maulida'),
+(69, '3211222710130001', 'Muhammad Andi Maulana', 72, '081738362838', 'JL. Asten Kuanino', 'muhammad'),
+(70, '5371050806140001', 'Muhammad Arham Hidayat', 72, '81273617394', 'Jl. Mawar Naikoten 1', 'muhammad'),
+(71, '5371051607130001', 'Muhammad Arsyl Ramadhan Lomi', 72, '85172637363', 'Jl. Kenari Naikoten I', 'muhammad'),
+(72, '5371040803140001', 'Muhammad Asyraf Djafar', 72, '81625983782', 'Jl. Perintis Kemerdekaan Kayu Putih', 'muhammad'),
+(73, '5301242707130001', 'Muhammad Satria Pallawa Ramadhan Taibe', 72, '82783909363', 'Jl. Nangka', 'muhammad'),
+(74, '5371045307130002', 'Nadhifa Ramadhani', 72, '81212098877', 'Naikoten 1 Pasar Inpres', 'nadhifa'),
+(75, '5304124910130001', 'Nadia Ataya Handaya Putri', 72, '82098083789', 'Jl. Sapta Marga 2 Kuanino', 'nadia'),
+(76, '5371055808130002', 'Naila Putri Azzalfa', 72, '81092890645', 'Jl. Angsa Putih Bakunase', 'naila'),
+(77, '5371021106140001', 'Naufal Fadhil Aburisky', 72, '81274637469', 'Jl. Fetor Funay ', 'naufal'),
+(78, '5371041503140002', 'Qidzama Darvesh Alfatik', 72, '82634636364', 'Jl. Hati Mulia Oebobo', 'qidzama'),
+(79, '5371051702140001', 'Rafi Alfariel', 72, '85163834638', 'Jl. Kenari Naikoten I', 'rafi'),
+(80, '5371042004130002', 'Raihan Fauzan Naufal Hidayat', 72, '81238373728', 'TDM 5 No 19', 'raihan'),
+(81, '5371010604140001', 'Sabiq E-Fathin Selan', 72, '81292938293', 'Jl. Lantana No 20 Naikoten 1', 'sabiq'),
+(82, '5371036204140001', 'Salsabila Nadhifa Putri Alifa Asri', 72, '81273635426', 'Jl. Nangka', 'salsabila'),
+(83, '5371046402140003', 'Salsabillah Mahestri', 72, '81273617394', 'Jl. Thamrin Oepoi', 'salsabillah'),
+(84, '5271065911130001', 'Vitaranova Eiffel Zalora Azwarenka', 72, '85172637363', 'Jl. Taebenu Liliba', 'vitaranova'),
+(85, '3205131005130001', 'Zidan Muhamad Ibrahim', 72, '081625983782', 'Sikumana', 'zidan'),
+(86, '5371012302140002', 'Zubhan Azzam Fathurrahman', 72, '82783909363', 'Jl. Air Sagu Batu Plat', 'zubhan'),
+(87, 'nis', 'nama_siswa', 0, 'no_telp', 'alamat', 'password'),
+(88, 'nis', 'nama_siswa', 0, 'no_telp', 'alamat', 'password');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `website`
 --
 
 CREATE TABLE `website` (
@@ -1329,367 +1337,348 @@ CREATE TABLE `website` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `website`
+-- Dumping data for table `website`
 --
 
 INSERT INTO `website` (`id`, `nama`, `deskripsi`, `alamat`, `kab`, `logo`, `fav`, `img_login`, `img_login_admin`, `email`, `telp`, `maps`, `link_fb`, `link_ig`, `link_tw`) VALUES
-(1, 'PP Roudhatul Quran', 'Roudhatul Quran Pesantren Penghapal Al-Quran Karawang Jawa BaratRoudhatul Quran Pesantren Penghapal Al-Quran Karawang Jawa Barat Roudhatul Quran Pesantren Penghapal Al-Quran Karawang Jawa Barat', 'Jalan Raya Semarang RT 02 RW 03 Jawa Tengah 51137', 'Semarang', 'RQ-removebg-preview.png', 'RQ-removebg-preview1.png', '—Pngtree—muslim_read_quran_5315501.png', '3627634.jpg', 'admin@roudhatulquran-manggungjaya.sch.id', '0812345678890', '<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63375.286073977055!2d109.63939797254515!3d-6.895940718061649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70242ca490fe13%3A0xc0c68a126b258cb6!2sPekalongan%2C%20Kota%20Pekalongan%2C%20Jawa%20Tengah%2C%20Indonesia!5e0!3m2!1sid!2shk!4v1625671808388!5m2!1sid!2shk\" width=\"800\" height=\"350\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"></iframe>', 'https://facebook.com/', 'https://instagram.com/', 'https://twitter.com/');
+(1, 'Sekolah Dasar', 'Roudhatul Quran Pesantren Penghapal Al-Quran Karawang Jawa BaratRoudhatul Quran Pesantren Penghapal Al-Quran Karawang Jawa Barat Roudhatul Quran Pesantren Penghapal Al-Quran Karawang Jawa Barat', 'Jalan Raya Semarang RT 02 RW 03 Jawa Tengah 51137', 'Semarang', 'RQ-removebg-preview.png', 'RQ-removebg-preview1.png', '—Pngtree—muslim_read_quran_5315501.png', '3627634.jpg', 'admin@roudhatulquran-manggungjaya.sch.id', '0812345678890', '<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63375.286073977055!2d109.63939797254515!3d-6.895940718061649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70242ca490fe13%3A0xc0c68a126b258cb6!2sPekalongan%2C%20Kota%20Pekalongan%2C%20Jawa%20Tengah%2C%20Indonesia!5e0!3m2!1sid!2shk!4v1625671808388!5m2!1sid!2shk\" width=\"800\" height=\"350\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"></iframe>', 'https://facebook.com/', 'https://instagram.com/', 'https://twitter.com/');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `about`
+-- Indexes for table `about`
 --
 ALTER TABLE `about`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `absen`
---
-ALTER TABLE `absen`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `absen_pegawai`
---
-ALTER TABLE `absen_pegawai`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `acara`
+-- Indexes for table `acara`
 --
 ALTER TABLE `acara`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `balas_konseling`
---
-ALTER TABLE `balas_konseling`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `daftar_absen`
---
-ALTER TABLE `daftar_absen`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `data_absen_pegawai`
---
-ALTER TABLE `data_absen_pegawai`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `data_cicilan`
---
-ALTER TABLE `data_cicilan`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `data_divisi`
---
-ALTER TABLE `data_divisi`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `data_kelas`
+-- Indexes for table `data_kelas`
 --
 ALTER TABLE `data_kelas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `data_kursi`
---
-ALTER TABLE `data_kursi`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `data_pelanggaran`
+-- Indexes for table `data_pelanggaran`
 --
 ALTER TABLE `data_pelanggaran`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `data_pendidikan`
+-- Indexes for table `data_pendidikan`
 --
 ALTER TABLE `data_pendidikan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `data_perizinan`
---
-ALTER TABLE `data_perizinan`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `email_sender`
+-- Indexes for table `email_sender`
 --
 ALTER TABLE `email_sender`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `gallery`
+-- Indexes for table `gallery`
 --
 ALTER TABLE `gallery`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `home`
+-- Indexes for table `home`
 --
 ALTER TABLE `home`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `karyawan`
+-- Indexes for table `karyawan`
 --
 ALTER TABLE `karyawan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `kategori_acara`
+-- Indexes for table `kategori_acara`
 --
 ALTER TABLE `kategori_acara`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `kategori_gallery`
+-- Indexes for table `kategori_gallery`
 --
 ALTER TABLE `kategori_gallery`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `konseling`
+-- Indexes for table `konseling`
 --
 ALTER TABLE `konseling`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `kontak`
+-- Indexes for table `kontak`
 --
 ALTER TABLE `kontak`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `pelanggaran`
+-- Indexes for table `pelanggaran`
 --
 ALTER TABLE `pelanggaran`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `penggajian`
---
-ALTER TABLE `penggajian`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `perizinan`
+-- Indexes for table `perizinan`
 --
 ALTER TABLE `perizinan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `ppdb`
+-- Indexes for table `ppdb`
 --
 ALTER TABLE `ppdb`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `siswa`
+-- Indexes for table `siswa`
 --
 ALTER TABLE `siswa`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `tagline`
+-- Indexes for table `tagline`
 --
 ALTER TABLE `tagline`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `website`
+-- Indexes for table `tbl_guru`
+--
+ALTER TABLE `tbl_guru`
+  ADD PRIMARY KEY (`id_guru`);
+
+--
+-- Indexes for table `tbl_jadwal_pelajaran`
+--
+ALTER TABLE `tbl_jadwal_pelajaran`
+  ADD PRIMARY KEY (`id_jadwal_pelajaran`),
+  ADD KEY `id_kelas` (`id_kelas`),
+  ADD KEY `id_pelajaran` (`id_pelajaran`),
+  ADD KEY `id_guru` (`id_guru`);
+
+--
+-- Indexes for table `tbl_jadwal_ujian`
+--
+ALTER TABLE `tbl_jadwal_ujian`
+  ADD PRIMARY KEY (`id_jadwal_ujian`),
+  ADD KEY `id_pelajaran` (`id_pelajaran`);
+
+--
+-- Indexes for table `tbl_kelas`
+--
+ALTER TABLE `tbl_kelas`
+  ADD PRIMARY KEY (`id_kelas`);
+
+--
+-- Indexes for table `tbl_nilai`
+--
+ALTER TABLE `tbl_nilai`
+  ADD PRIMARY KEY (`id_nilai`),
+  ADD KEY `id_nilai` (`id_siswa`),
+  ADD KEY `id_nilai2` (`id_pelajaran`);
+
+--
+-- Indexes for table `tbl_pelajaran`
+--
+ALTER TABLE `tbl_pelajaran`
+  ADD PRIMARY KEY (`id_pelajaran`);
+
+--
+-- Indexes for table `tbl_siswa`
+--
+ALTER TABLE `tbl_siswa`
+  ADD PRIMARY KEY (`id_siswa`),
+  ADD KEY `id_kelas` (`id_kelas`);
+
+--
+-- Indexes for table `website`
 --
 ALTER TABLE `website`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `about`
+-- AUTO_INCREMENT for table `about`
 --
 ALTER TABLE `about`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `absen`
---
-ALTER TABLE `absen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
-
---
--- AUTO_INCREMENT untuk tabel `absen_pegawai`
---
-ALTER TABLE `absen_pegawai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `acara`
+-- AUTO_INCREMENT for table `acara`
 --
 ALTER TABLE `acara`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT untuk tabel `balas_konseling`
---
-ALTER TABLE `balas_konseling`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `daftar_absen`
---
-ALTER TABLE `daftar_absen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT untuk tabel `data_absen_pegawai`
---
-ALTER TABLE `data_absen_pegawai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `data_cicilan`
---
-ALTER TABLE `data_cicilan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT untuk tabel `data_divisi`
---
-ALTER TABLE `data_divisi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- AUTO_INCREMENT untuk tabel `data_kelas`
+-- AUTO_INCREMENT for table `data_kelas`
 --
 ALTER TABLE `data_kelas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT untuk tabel `data_kursi`
---
-ALTER TABLE `data_kursi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
-
---
--- AUTO_INCREMENT untuk tabel `data_pelanggaran`
+-- AUTO_INCREMENT for table `data_pelanggaran`
 --
 ALTER TABLE `data_pelanggaran`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT untuk tabel `data_pendidikan`
+-- AUTO_INCREMENT for table `data_pendidikan`
 --
 ALTER TABLE `data_pendidikan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT untuk tabel `data_perizinan`
---
-ALTER TABLE `data_perizinan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT untuk tabel `email_sender`
+-- AUTO_INCREMENT for table `email_sender`
 --
 ALTER TABLE `email_sender`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `gallery`
+-- AUTO_INCREMENT for table `gallery`
 --
 ALTER TABLE `gallery`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT untuk tabel `home`
+-- AUTO_INCREMENT for table `home`
 --
 ALTER TABLE `home`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `karyawan`
+-- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `kategori_acara`
+-- AUTO_INCREMENT for table `kategori_acara`
 --
 ALTER TABLE `kategori_acara`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT untuk tabel `kategori_gallery`
+-- AUTO_INCREMENT for table `kategori_gallery`
 --
 ALTER TABLE `kategori_gallery`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT untuk tabel `konseling`
+-- AUTO_INCREMENT for table `konseling`
 --
 ALTER TABLE `konseling`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT untuk tabel `kontak`
+-- AUTO_INCREMENT for table `kontak`
 --
 ALTER TABLE `kontak`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT untuk tabel `pelanggaran`
+-- AUTO_INCREMENT for table `pelanggaran`
 --
 ALTER TABLE `pelanggaran`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT untuk tabel `penggajian`
---
-ALTER TABLE `penggajian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT untuk tabel `perizinan`
+-- AUTO_INCREMENT for table `perizinan`
 --
 ALTER TABLE `perizinan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
--- AUTO_INCREMENT untuk tabel `ppdb`
+-- AUTO_INCREMENT for table `ppdb`
 --
 ALTER TABLE `ppdb`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT untuk tabel `siswa`
+-- AUTO_INCREMENT for table `siswa`
 --
 ALTER TABLE `siswa`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `tagline`
+-- AUTO_INCREMENT for table `tagline`
 --
 ALTER TABLE `tagline`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `website`
+-- AUTO_INCREMENT for table `tbl_guru`
+--
+ALTER TABLE `tbl_guru`
+  MODIFY `id_guru` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+
+--
+-- AUTO_INCREMENT for table `tbl_jadwal_pelajaran`
+--
+ALTER TABLE `tbl_jadwal_pelajaran`
+  MODIFY `id_jadwal_pelajaran` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `tbl_jadwal_ujian`
+--
+ALTER TABLE `tbl_jadwal_ujian`
+  MODIFY `id_jadwal_ujian` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `tbl_kelas`
+--
+ALTER TABLE `tbl_kelas`
+  MODIFY `id_kelas` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+
+--
+-- AUTO_INCREMENT for table `tbl_nilai`
+--
+ALTER TABLE `tbl_nilai`
+  MODIFY `id_nilai` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `tbl_pelajaran`
+--
+ALTER TABLE `tbl_pelajaran`
+  MODIFY `id_pelajaran` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+
+--
+-- AUTO_INCREMENT for table `tbl_siswa`
+--
+ALTER TABLE `tbl_siswa`
+  MODIFY `id_siswa` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+
+--
+-- AUTO_INCREMENT for table `website`
 --
 ALTER TABLE `website`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tbl_jadwal_ujian`
+--
+ALTER TABLE `tbl_jadwal_ujian`
+  ADD CONSTRAINT `id_pelajaran2` FOREIGN KEY (`id_pelajaran`) REFERENCES `tbl_pelajaran` (`id_pelajaran`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

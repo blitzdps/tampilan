@@ -51,10 +51,10 @@ class Ppdb extends CI_Controller
         $this->form_validation->set_rules('pek_ayah', 'Pekerjaan Ayah', 'required');
         $this->form_validation->set_rules('pek_ibu', 'Pekerjaan Ibu', 'required');
         $this->form_validation->set_rules('no_telp', 'Nomor Telepon', 'required');
-        $this->form_validation->set_rules('thn_msk', 'Tahun Masuk', 'required');
-        $this->form_validation->set_rules('sekolah_asal', 'Sekolah Asal', 'required');
-        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
-        $this->form_validation->set_rules('diniyah', 'Diniyah', 'required');
+        // $this->form_validation->set_rules('thn_msk', 'Tahun Masuk', 'required');
+        // $this->form_validation->set_rules('sekolah_asal', 'Sekolah Asal', 'required');
+        // $this->form_validation->set_rules('kelas', 'Kelas', 'required');
+        // $this->form_validation->set_rules('diniyah', 'Diniyah', 'required');
 
         if ($this->form_validation->run() == false) {
             $this->load->view('frontend/header', $data);
@@ -129,10 +129,10 @@ class Ppdb extends CI_Controller
                 'pek_wali' => $this->input->post('pek_wali'),
                 'peng_ortu' => $this->input->post('peng_ortu'),
                 'no_telp' => $this->input->post('no_telp'),
-                'thn_msk' => $this->input->post('thn_msk'),
-                'sekolah_asal' => $this->input->post('sekolah_asal'),
-                'kelas' => $this->input->post('kelas'),
-                'diniyah' => $this->input->post('diniyah'),
+                // 'thn_msk' => $this->input->post('thn_msk'),
+                // 'sekolah_asal' => $this->input->post('sekolah_asal'),
+                // 'kelas' => $this->input->post('kelas'),
+                // 'diniyah' => $this->input->post('diniyah'),
                 'img_siswa' => $img_siswa,
                 'img_kk' => $img_kk,
                 'img_ijazah' => $img_ijazah,
@@ -325,10 +325,10 @@ class Ppdb extends CI_Controller
                 'pek_wali' => $this->input->post('pek_wali'),
                 'peng_ortu' => $this->input->post('peng_ortu'),
                 'no_telp' => $this->input->post('no_telp'),
-                'thn_msk' => $this->input->post('thn_msk'),
-                'sekolah_asal' => $this->input->post('sekolah_asal'),
-                'kelas' => $this->input->post('kelas'),
-                'diniyah' => $this->input->post('diniyah'),
+                // 'thn_msk' => $this->input->post('thn_msk'),
+                // 'sekolah_asal' => $this->input->post('sekolah_asal'),
+                // 'kelas' => $this->input->post('kelas'),
+                // 'diniyah' => $this->input->post('diniyah'),
                 'img_siswa' => $img_siswa,
                 'img_kk' => $img_kk,
                 'img_ijazah' => $img_ijazah,

@@ -270,20 +270,24 @@
                                 <textarea type="text" class="form-control" id="alamat" name="alamat" placeholder="Alamat"><?= $siswa['alamat'] ?></textarea>
                                 <?= form_error('alamat', '<small class="text-danger pl-3">', ' </small>') ?>
                             </div>
+                            
+
+                        </div>
+
+                        <div class="col-md-6">
+                            
                             <div class="form-group">
                                 <label>Nama Ayah</label>
                                 <input type="text" class="form-control" id="nama_ayah" name="nama_ayah" placeholder="Nama Orang Tua" value="<?= $siswa['nama_ayah'] ?>">
                                 <?= form_error('nama_ayah', '<small class="text-danger pl-3">', ' </small>') ?>
                             </div>
+                            
                             <div class="form-group">
                                 <label>Nama Ibu</label>
                                 <input type="text" class="form-control" id="nama_ibu" name="nama_ibu" placeholder="Nama Orang Tua" value="<?= $siswa['nama_ibu'] ?>">
                                 <?= form_error('nama_ibu', '<small class="text-danger pl-3">', ' </small>') ?>
                             </div>
-
-                        </div>
-
-                        <div class="col-md-6">
+                            
                             <div class="form-group">
                                 <label>Nama Wali</label>
                                 <input type="text" class="form-control" id="nama_wali" name="nama_wali" placeholder="Nama Wali" value="<?= $siswa['nama_wali'] ?>">
@@ -413,30 +417,6 @@
                                 <label>Nomor Telepon Ortu / Wali</label>
                                 <input type="text" class="form-control" id="no_telp" name="no_telp" placeholder="Nomor Telepon" value="<?= $siswa['no_telp'] ?>">
                                 <?= form_error('no_telp', '<small class="text-danger pl-3">', ' </small>') ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Tahun Masuk</label>
-                                <input type="number" class="form-control" id="thn_msk" name="thn_msk" placeholder="Tahun Masuk" value="<?= $siswa['thn_msk'] ?>">
-                                <?= form_error('thn_msk', '<small class="text-danger pl-3">', ' </small>') ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Sekolah Asal</label>
-                                <input type="text" class="form-control" id="sekolah_asal" name="sekolah_asal" placeholder="Sekolah Asal" value="<?= $siswa['sekolah_asal'] ?>">
-                                <?= form_error('sekolah_asal', '<small class="text-danger pl-3">', ' </small>') ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Kelas</label>
-                                <input type="text" class="form-control" id="kelas" name="kelas" placeholder="Kelas" value="<?= $siswa['kelas'] ?>">
-                                <?= form_error('kelas', '<small class="text-danger pl-3">', ' </small>') ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Diniyah</label>
-                                <input type="text" class="form-control" id="diniyah" name="diniyah" placeholder="Diniyah" value="<?= $siswa['diniyah'] ?>">
-                                <?= form_error('diniyah', '<small class="text-danger pl-3">', ' </small>') ?>
                             </div>
 
                         </div>

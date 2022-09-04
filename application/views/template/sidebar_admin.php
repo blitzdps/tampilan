@@ -3,6 +3,7 @@
 // $notif_konseling = $this->db->get_where('konseling', ['status' => 'Pending'])->num_rows();
 $notif_ppdb = $this->db->get_where('ppdb', ['status' => '0'])->num_rows();
 $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
+$notif_daftar_ulang = $this->db->get_where('siswa', ['status' => '2'])->num_rows();
 ?>
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -46,8 +47,13 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
         <div id="collapseSiswa" class="collapse" aria-labelledby="headingSiswa" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Pilih menu:</h6>
-                <a class="collapse-item" href="<?= base_url('admin_siswa'); ?>">Data siswa</a>
-                <a class="collapse-item" href="<?= base_url('admin_siswa/tambah'); ?>">Pendaftaran siswa</a>
+                <a class="collapse-item" href="<?= base_url('admin/daftar_siswa'); ?>">
+                <span>Data siswa </span> &nbsp;
+                <?php if ($notif_daftar_ulang) : ?>
+                    <span class="badge badge-danger" style="font-size: 10px;"><?= $notif_daftar_ulang ?></span>
+                <?php endif ?>
+                </a>
+                <a class="collapse-item" href="<?= base_url('admin/tambah_siswa'); ?>">Pendaftaran siswa</a>
             </div>
         </div>
         </li>
@@ -163,75 +169,9 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
     </div>
 
                 <!-- Nav Item - Utilities Collapse Menu -->
-
-                <?php if ($menu == 'tugas') : ?>
-                <li class="nav-item active">
-                <?php else : ?>
-                <li class="nav-item">
-                <?php endif; ?>
-                <a class="nav-link" href="<?= base_url('admin_tugas'); ?>">
-                <i class="fas fa-fw fa-address-card"></i>
-                    <span>Tugas</span>
-                </a>
-                </li>
-                
-                <?php if ($menu == 'nilai_tugas') : ?>
-                <li class="nav-item active">
-                <?php else : ?>
-                <li class="nav-item">
-                <?php endif; ?>
-                <a class="nav-link" href="<?= base_url('admin_nilai_tugas'); ?>">
-                <i class="fas fa-fw fa-address-card"></i>
-                    <span>Nilai Tugas</span>
-                </a>
-                </li>
-
-                <?php if ($menu == 'ulangan') : ?>
-                <li class="nav-item active">
-                <?php else : ?>
-                <li class="nav-item">
-                <?php endif; ?>
-                <a class="nav-link" href="<?= base_url('admin_ulangan'); ?>">
-                <i class="fas fa-fw fa-address-card"></i>
-                    <span>Ulangan</span>
-                </a>
-                </li>
-
-                <?php if ($menu == 'nilai_ulangan') : ?>
-                <li class="nav-item active">
-                <?php else : ?>
-                <li class="nav-item">
-                <?php endif; ?>
-                <a class="nav-link" href="<?= base_url('admin_nilai_ulangan'); ?>">
-                <i class="fas fa-fw fa-address-card"></i>
-                    <span>Nilai Ulangan</span>
-                </a>
-                </li>
-
-                <?php if ($menu == 'nilai_siswa') : ?>
-                <li class="nav-item active">
-                <?php else : ?>
-                <li class="nav-item">
-                <?php endif; ?>
-                <a class="nav-link" href="<?= base_url('admin_nilai_siswa'); ?>">
-                <i class="fas fa-fw fa-address-card"></i>
-                    <span>Nilai Siswa</span>
-                </a>
-                </li>
-
-                <?php if ($menu == 'list_absen') : ?>
-                <li class="nav-item active">
-                <?php else : ?>
-                <li class="nav-item">
-                <?php endif; ?>
-                <a class="nav-link" href="<?= base_url('admin/daftar_absen'); ?>">
-                <i class="fas fa-fw fa-address-card"></i>
-                    <span>Absensi</span>
-                </a>
-                </li>
                 
 
-                    <!-- <?php if ($menu == 'kbm') : ?>
+                    <?php if ($menu == 'kbm') : ?>
                         <li class="nav-item active">
                         <?php else : ?>
                         <li class="nav-item">
