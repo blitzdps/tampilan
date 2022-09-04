@@ -14,7 +14,7 @@
                         </div>
                     </h4>
                     <?= $this->session->flashdata('message') ?>
-                    <form style="margin: 20px 0;" action="<?= base_url() . 'admin/pelajaran'; ?>" method="post">
+                    <form style="margin: 20px 0;" action="<?= base_url() . 'admin_pelajaran'; ?>" method="post">
                         <div class="form-row">
                             <div class="form-group col-lg-3">
                             <a href="" class="btn btn-block btn-sm btn-info" data-toggle="modal" data-target="#addNewData"><i class="fa fa-plus-circle"></i> Tambah Data Pelajaran</a>
@@ -57,7 +57,7 @@
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                <form action="<?= base_url('update/update_pelajaran') ?>" method="post">
+                                                <form action="<?= base_url('admin_pelajaran/ubah') ?>" method="post">
                                                     <div class="modal-body">
 
                                                         <div class="form-group">
@@ -98,7 +98,7 @@
 
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                    <a href="<?= base_url('hapus/hapus_pelajaran?id_pelajaran=') ?><?= $d['id_pelajaran'] ?>" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                                    <a href="<?= base_url('admin_pelajaran/hapus?id_pelajaran=') ?><?= $d['id_pelajaran'] ?>" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
                                                 </div>
 
                                             </div>
@@ -181,7 +181,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<?= base_url('admin/pelajaran') ?>" method="post">
+            <form action="<?= base_url('admin_pelajaran/tambah') ?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="">Kode Pelajaran</label>

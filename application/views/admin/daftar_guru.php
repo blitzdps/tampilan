@@ -17,7 +17,7 @@
                     <form style="margin: 20px 0;" action="<?= base_url() . 'admin/daftar_guru'; ?>" method="post">
                         <div class="form-row">
                             <div class="form-group col-lg-3">
-                                <a href="<?= base_url('admin/tambah_guru'); ?>" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Pendaftaran Guru</a>
+                                <a href="<?= base_url('admin/tambah_guru'); ?>" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Tambah Guru</a>
                             </div>
                     </form>
                 </div>

@@ -225,7 +225,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">Nama Guru</label>
-                        <input type="text" class="form-control" id="id_guru" name="id_guru" placeholder="Nama Guru<" value="<?= set_value('id_guru') ?>">
+                        <input type="text" class="form-control" id="id_guru" name="id_guru" placeholder="Nama Guru" value="<?= set_value('id_guru') ?>">
                     </div>
                     <div class="form-group">
                         <label for="">Jam Mulai</label>

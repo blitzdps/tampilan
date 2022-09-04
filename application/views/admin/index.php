@@ -1,6 +1,6 @@
 <?php
-$notif_izin      = $this->db->get_where('perizinan', ['status' => 'Pending'])->num_rows();
-$notif_konseling = $this->db->get_where('konseling', ['status' => 'Pending'])->num_rows();
+// $notif_izin      = $this->db->get_where('perizinan', ['status' => 'Pending'])->num_rows();
+// $notif_konseling = $this->db->get_where('konseling', ['status' => 'Pending'])->num_rows();
 $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
 ?>
 <!-- Begin Page Content -->

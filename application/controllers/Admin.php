@@ -61,33 +61,33 @@ class Admin extends CI_Controller
         $data['web'] =  $this->db->get('website')->row_array();
 
         $data['kelas'] = $this->db->get("data_kelas")->num_rows();
-        $data['pendidikan'] = $this->db->get("data_pendidikan")->result_array();
+        // $data['pendidikan'] = $this->db->get("data_pendidikan")->result_array();
         $data['pelajaran'] = $this->db->get("tbl_pelajaran")->result_array();
         $data['kelas'] = $this->db->get("tbl_kelas")->result_array();
         $data['about'] = $this->db->get("about")->row_array();
 
-        $data['sum_siswa'] = $this->db->get("siswa")->num_rows();
+        $data['sum_siswa'] = $this->db->get("tbl_siswa")->num_rows();
         $data['sum_peng'] = $this->db->get("karyawan")->num_rows();
-        $data['sum_konsel'] = $this->db->get("konseling")->num_rows();
+        // $data['sum_konsel'] = $this->db->get("konseling")->num_rows();
 
-        $data['sum_izin'] = $this->db->get("perizinan")->num_rows();
-        $data['sum_takzir'] = $this->db->get("pelanggaran")->num_rows();
+        // $data['sum_izin'] = $this->db->get("perizinan")->num_rows();
+        // $data['sum_takzir'] = $this->db->get("pelanggaran")->num_rows();
         $data['sum_kontak'] = $this->db->get("kontak")->num_rows();
         $data['sum_gallery'] = $this->db->get("gallery")->num_rows();
         $data['sum_acara'] = $this->db->get("acara")->num_rows();
 
-        $this->db->where('jk', 'L');
-        $data['sum_pria'] = $this->db->get("siswa")->num_rows();
+        // $this->db->where('jk', 'L');
+        // $data['sum_pria'] = $this->db->get("siswa")->num_rows();
 
-        $this->db->where('jk', 'P');
-        $data['sum_wanita'] = $this->db->get("siswa")->num_rows();
+        // $this->db->where('jk', 'P');
+        // $data['sum_wanita'] = $this->db->get("siswa")->num_rows();
 
-        $this->db->where('point !=', 100);
-        $this->db->order_by('point', 'ASC');
-        $data['siswa'] = $this->db->get('siswa', 7)->result_array();
-        $this->db->where('jumlah !=', 0);
-        $this->db->order_by('jumlah', 'DESC');
-        $data['pelanggaran'] = $this->db->limit(7)->get('data_pelanggaran')->result_array();
+        // $this->db->where('point !=', 100);
+        // $this->db->order_by('point', 'ASC');
+        // $data['siswa'] = $this->db->get('siswa', 7)->result_array();
+        // $this->db->where('jumlah !=', 0);
+        // $this->db->order_by('jumlah', 'DESC');
+        // $data['pelanggaran'] = $this->db->limit(7)->get('data_pelanggaran')->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar_admin', $data);
@@ -484,6 +484,17 @@ class Admin extends CI_Controller
         $data['title'] = 'Tambah Guru';
         $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
         $data['web'] =  $this->db->get('website')->row_array();
+
+        
+        $id_prov     = $this->input->post('prov');
+        $kab      = $this->input->post('kab');
+
+        $prov =  $data['prov'] = $this->db->get_where('provinsi', ['id_prov' => $id_prov])->row_array();
+
+
+        $this->db->order_by('nama', 'asc');
+        $data['prov'] = $this->db->get('provinsi')->result_array();
+        $data['kab'] = $this->db->get('kabupaten')->result_array();
         
         $this->form_validation->set_rules('nik', 'NIK', 'required|is_unique[siswa.nik]', [
             'is_unique' => 'Nik ini sudah terdaftar!',
@@ -1072,9 +1083,8 @@ class Admin extends CI_Controller
         $data['title'] = 'Daftar Absen';
         $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
         $data['web'] =  $this->db->get('website')->row_array();
-        $data['kelas_data'] =  $this->db->get('data_kelas')->result_array();
-
-        $data['pendidikan'] = $this->db->get("data_pendidikan")->result_array();
+        $data['kelas'] =  $this->db->get('tbl_kelas')->result_array();
+        $data['pelajaran'] =  $this->db->get('tbl_pelajaran')->result_array();
 
         $this->db->order_by('id', 'desc');
         $data['absen'] =  $this->db->get_where('daftar_absen')->result_array();
@@ -1083,6 +1093,7 @@ class Admin extends CI_Controller
         $data['absen1'] =  $this->db->get_where('daftar_absen');
 
         $this->form_validation->set_rules('kelas', 'Kelas', 'required');
+        $this->form_validation->set_rules('pelajaran', 'Pelajaran', 'required');
         $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
 
         if ($this->form_validation->run() == false) {
@@ -1093,14 +1104,16 @@ class Admin extends CI_Controller
             $this->load->view('template/footer_admin');
         } else {
             $id_kam = $this->input->post('kelas');
+            $id_pel = $this->input->post('pelajaran');
             $tgl = $this->input->post('tanggal');
 
-            $kelas = $this->db->get_where('data_kelas', ['id' => $id_kam])->row_array();
+            $kelas = $this->db->get_where('tbl_kelas', ['id_kelas' => $id_kam])->row_array();
+            $pelajaran = $this->db->get_where('tbl_pelajaran', ['id_pelajaran' => $id_pel])->row_array();
             $cek_daftar = $this->db->get_where('daftar_absen', ['id_kelas' => $id_kam, 'tgl' => $tgl])->row_array();
 
-            if ($cek_daftar['id_kelas'] == $id_kam || $cek_daftar['tgl'] == $tgl) {
+            if ($cek_daftar['id_kelas'] == $id_kam && $cek_daftar['id_pelajaran'] == $id_pel && $cek_daftar['tgl'] == $tgl) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Data absen kelas <strong>' . $kelas['nama'] . '</strong> tanggal <strong>' . mediumdate_indo(date($tgl)) . '</strong> sudah ada.
+                Data absen kelas <strong>' . $kelas['kode_kelas'] . '</strong> <strong>' . $pelajaran['nama_pelajaran'] . '</strong> tanggal <strong>' . mediumdate_indo(date($tgl)) . '</strong> sudah ada.
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -1108,23 +1121,24 @@ class Admin extends CI_Controller
                 redirect('admin/daftar_absen');
             } else {
                 $data = [
-                    'id_pend' => $this->input->post('pendidikan'),
                     'id_kelas' => $id_kam,
+                    'id_pelajaran' => $id_pel,
                     'tgl' => $tgl,
                     'status' => 'Belum Selesai'
                 ];
                 $this->db->insert('daftar_absen', $data);
 
-                $absen  =  $this->db->get_where('daftar_absen', ['id_kelas' => $id_kam, 'tgl' => $tgl])->row_array();
+                $absen  =  $this->db->get_where('daftar_absen', ['id_kelas' => $id_kam, 'id_pelajaran' => $id_pel ,'tgl' => $tgl])->row_array();
 
-                $cek_kelas = $this->db->get_where('siswa', ['status' => '1', 'id_kelas' => $id_kam])->result_array();
+                $cek_kelas = $this->db->get_where('tbl_siswa', ['id_kelas' => $id_kam])->result_array();
 
                 foreach ($cek_kelas as $a) {
                     $data2 = [
-                        'id_siswa' => $a['id'],
+                        'id_siswa' => $a['id_siswa'],
                         'tgl' => $tgl,
                         'waktu' => date('h:i:s'),
                         'id_kelas' => $a['id_kelas'],
+                        'id_pelajaran' => $absen['id_pelajaran'],
                         'status' => 'Hadir',
                         'role_absen' => $absen['id']
                     ];
@@ -1153,12 +1167,14 @@ class Admin extends CI_Controller
         $data['title'] = 'Absen kelas ' . $absen['id_kelas'] . '';
         $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
         $data['web'] =  $this->db->get('website')->row_array();
-        $id_peng = $data['user']['id'];
+        // $id_peng = $data['user']['id'];
 
         $this->db->order_by('id', 'desc');
         $data['absen'] =  $this->db->get_where('absen', ['role_absen' => $id_absen])->result_array();
 
-        $data['kelas_data'] = $this->db->get_where('data_kelas', ['id_peng' => $id_peng])->result_array();
+        // $data['kelas'] = $this->db->get_where('tbl_kelas', ['id_peng' => $id_peng])->result_array();
+        $data['kelas'] = $this->db->get_where('tbl_kelas')->result_array();
+        $data['pelajaran'] = $this->db->get_where('tbl_pelajaran')->result_array();
         $data['daftar_absen'] = $this->db->get_where('daftar_absen', ['id' => $id_absen])->row_array();
 
         $this->load->view('template/header', $data);
@@ -2948,503 +2964,4 @@ class Admin extends CI_Controller
         }
     }
 
-    public function data_divisi()
-    {
-        $data['menu'] = 'menu-4';
-        $data['title'] = 'Level Divisi';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $this->db->order_by('id', 'DESC');
-        $data['gaji'] =  $this->db->get('data_divisi')->result_array();
-
-        $this->form_validation->set_rules('nama', 'Nama', 'required');
-        $this->form_validation->set_rules('gaji', 'Gaji', 'required');
-        $this->form_validation->set_rules('tunjangan', 'Tunjangan', 'required');
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/data/divisi', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-            $nama = $this->input->post('nama');
-            $this->db->where('nama', $nama);
-            $cek_data =  $this->db->get('data_divisi')->row_array();
-
-            if ($cek_data['nama'] == $nama) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Data gaji <strong>' . $nama . '</strong> Sudah Ada :(
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              </div>');
-                redirect('admin/data_divisi');
-            }
-
-            $data = [
-                'nama' => $nama,
-                'gaji' => $this->input->post('gaji'),
-                'tunjangan' => $this->input->post('tunjangan'),
-                'role_id' => $this->input->post('level')
-
-            ];
-            $this->db->insert('data_divisi', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data Potongan <strong>' . $nama . '</strong> berhasil ditambahkan :)
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>');
-            redirect('admin/data_divisi');
-        }
-    }
-
-
-    public function penggajian()
-    {
-        $data['menu'] = 'gaji';
-        $data['title'] = 'Penggajian';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $this->db->order_by('id', 'DESC');
-        $data['penggajian'] =  $this->db->get('penggajian')->result_array();
-
-        $this->form_validation->set_rules('tgl_awal', 'Tanggal Awal', 'required');
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/penggajian/penggajian', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-            $tgl_awal = $this->input->post('tgl_awal');
-            $tgl_akhir = $this->input->post('tgl_akhir');
-
-            $cek_kar = $this->db->get_where('karyawan', ['status' => '1', 'role_id !=' => 1])->result_array();
-
-            foreach ($cek_kar as $a) {
-                $data = [
-                    'id_peng' => $a['id'],
-                    'id_divisi' => $a['id_divisi'],
-                    'tgl_awal' => $tgl_awal,
-                    'tgl_akhir' => $tgl_akhir,
-                    'status' => 0,
-                ];
-                $this->db->insert('penggajian', $data);
-            }
-
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data Penggajian berhasil di tambahkan :)
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>');
-            redirect('admin/penggajian');
-        }
-    }
-
-
-    public function data_cicilan()
-    {
-        $data['menu'] = 'gaji';
-        $data['title'] = 'Data cicilan';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $this->db->order_by('id', 'DESC');
-        $data['cicilan'] =  $this->db->get('data_cicilan')->result_array();
-
-        $this->form_validation->set_rules('nama', 'Nama', 'required');
-        $this->form_validation->set_rules('karyawan', 'Nama Karyawan', 'required');
-        $this->form_validation->set_rules('nominal', 'Nominal', 'required');
-        $this->form_validation->set_rules('tenor', 'Tenor', 'required');
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/penggajian/data_cicilan', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-            $nama = $this->input->post('nama');
-            $id_peng = $this->input->post('karyawan');
-            $this->db->where('nama', $nama);
-            $this->db->where('id_peng', $id_peng);
-            $cek_data =  $this->db->get('data_cicilan')->row_array();
-
-            $this->db->where('id', $id_peng);
-            $cek_peng =  $this->db->get('karyawan')->row_array();
-
-            if ($cek_data['nama'] == $nama) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Data cicilan <strong>' . $nama . '</strong> dengan nama <strong>' . $cek_peng['nama'] . '</strong> Sudah Ada :(
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              </div>');
-                redirect('admin/data_cicilan');
-            }
-
-            $data = [
-                'nama' => $nama,
-                'id_peng' => $id_peng,
-                'nominal' =>  $this->input->post('nominal'),
-                'tenor' =>  $this->input->post('tenor')
-            ];
-            $this->db->insert('data_cicilan', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data cicilan <strong>' . $nama . '</strong> dengan nama <strong>' . $cek_peng['nama'] . '</strong> berhasil ditambahkan :)
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>');
-            redirect('admin/data_cicilan');
-        }
-    }
-
-    public function absen_pegawai()
-    {
-        $data['menu'] = 'absen';
-        $data['title'] = 'Absensi Pegawai';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $this->db->order_by('tgl', 'DESC');
-        $data['absen_pegawai'] =  $this->db->get('data_absen_pegawai')->result_array();
-        $data['absen'] =  $this->db->get('absen_pegawai')->result_array();
-
-        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/absen/absen_pegawai', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-            $tgl = $this->input->post('tanggal');
-
-            $data = [
-                'tgl' => $tgl,
-                'status' => 0
-            ];
-            $this->db->insert('data_absen_pegawai', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data absen pegawai tanggal <strong>' . mediumdate_indo(date($tgl)) . '</strong> berhasil ditambahkan :)
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>');
-            redirect('admin/absen_pegawai');
-        }
-
-
-
-        if ($this->input->post('submit', TRUE) == 'upload') {
-            $config['upload_path']      = './temp_doc/'; //siapkan path untuk upload file
-            $config['allowed_types']    = 'xlsx|xls'; //siapkan format file
-            $config['file_name']        = 'doc' . time(); //rename file yang diupload
-
-            $this->load->library('upload', $config);
-
-            //looping pembacaan sheet dalam file        
-            if ($this->upload->do_upload('excel')) {
-                //fetch data upload
-                $file   = $this->upload->data();
-
-                $reader = ReaderEntityFactory::createXLSXReader(); //buat xlsx reader
-                $reader->open('./temp_doc/' . $file['file_name']); //open file xlsx yang baru saja diunggah
-
-                foreach ($reader->getSheetIterator() as $sheet1) {
-                    $numRow1 = 1;
-                    $save1   = array();
-
-                    //looping pembacaan row dalam sheet
-                    foreach ($sheet1->getRowIterator() as $row1) {
-
-                        if ($numRow1 > 1) {
-                            // ambil cell
-                            $cells1 = $row1->getCells();
-
-                            $data_tgl = $this->db->get_where('data_absen_pegawai', ['tgl' => $cells1[1]])->num_rows();
-
-                            if ($data_tgl == 0) {
-                                $insert1 = [
-                                    'tgl'      => $cells1[1],
-                                    'status'      => 1
-                                ];
-
-                                $this->db->insert('data_absen_pegawai', $insert1);
-                            }
-                        }
-                        $numRow1++;
-                    }
-                }
-
-                //looping pembacaan sheet dalam file        
-                foreach ($reader->getSheetIterator() as $sheet) {
-                    $numRow = 1;
-
-                    //siapkan variabel array kosong untuk menampung variabel array data
-                    $save   = array();
-
-                    //looping pembacaan row dalam sheet
-                    foreach ($sheet->getRowIterator() as $row) {
-
-                        if ($numRow > 1) {
-                            //ambil cell
-                            $cells = $row->getCells();
-
-                            $data_tgl = $this->db->get_where('data_absen_pegawai', ['tgl' => $cells[1]])->row_array();
-
-                            $cek_p = $this->db->get_where(
-                                'karyawan',
-                                ['id_fingerprint' => $cells[0]]
-                            )->row_array();
-                            $data = array(
-                                'id_peng'      => $cek_p['id'],
-                                'tgl'          => $cells[1],
-                                'jam_masuk'    => $cells[2],
-                                'sum_jam'      => $cek_p['jam_mengajar'],
-                                'status'       => 1,
-                                'role_absen'   => $data_tgl['id']
-                            );
-
-                            //tambahkan array $data ke $save
-                            array_push($save, $data);
-                        }
-
-                        $numRow++;
-                    }
-
-                    //simpan data ke database
-                    $this->Import_model->simpan_absen($save);
-
-                    //tutup spout reader
-                    $reader->close();
-
-                    //hapus file yang sudah diupload
-                    unlink('./temp_doc/' . $file['file_name']);
-
-                    //tampilkan pesan success dan redirect ulang ke index controller import
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Success!</strong> berhasil mengimport data :)
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                      </div>');
-                    redirect('admin/absen_pegawai');
-                }
-            } else {
-                //tampilkan pesan error jika file gagal diupload
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Error!</strong> ' . $this->upload->display_errors() . '
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  </div>');
-                redirect('admin/absen_pegawai');
-            }
-        }
-    }
-
-
-    public function data_absensi()
-    {
-        $data['menu'] = 'absen';
-        $data['title'] = 'Data Absensi';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        // $this->db->order_by('tgl', 'DESC');
-        $data['absen'] =  $this->db->get('absen_pegawai')->result_array();
-        $this->db->where('role_id !=', '1');
-        $data['karyawan'] =  $this->db->get('karyawan')->result_array();
-        $data['pendidikan'] =  $this->db->get('data_pendidikan')->result_array();
-        $data['data_divisi'] =  $this->db->get('data_divisi')->result_array();
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/absen/data_absensi', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-            $tgl = $this->input->post('tanggal');
-
-            $data = [
-                'tgl' => $tgl,
-                'status' => 0
-            ];
-            $this->db->insert('data_absen_pegawai', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data absen pegawai tanggal <strong>' . mediumdate_indo(date($tgl)) . '</strong> berhasil ditambahkan :)
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>');
-            redirect('admin/data_absensi');
-        }
-    }
-
-
-    public function view_absen_pegawai()
-    {
-        $id_absen  = $this->input->get('id');
-        $absen     = $this->db->get_where('data_absen_pegawai', ['id' => $id_absen])->row_array();
-
-        $data['id_absen'] = $this->input->get('id');
-        $data['tgl_absen'] = $this->uri->segment(3);
-
-        $data['menu'] = 'absen';
-        $data['title'] = 'Absen Pegawai';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $this->db->order_by('id', 'desc');
-        $this->db->where('tgl', $this->uri->segment(3));
-        $data['absen'] =  $this->db->get_where('absen_pegawai', ['role_absen' => $id_absen])->result_array();
-
-        $data['daftar_absen'] = $absen;
-
-        $this->load->view('template/header', $data);
-        $this->load->view('template/sidebar_admin', $data);
-        $this->load->view('template/topbar_admin', $data);
-        $this->load->view('admin/absen/view_absen', $data);
-        $this->load->view('template/footer_admin');
-    }
-
-    public function tambah_karyawan()
-    {
-        $data['menu'] = 'menu-9';
-        $data['title'] = 'Tambah Karyawan';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $data['pendidikan'] = $this->db->get('data_pendidikan')->result_array();
-        $data['divisi'] = $this->db->get('data_divisi')->result_array();
-
-        $this->form_validation->set_rules('nik', 'NIK', 'required|is_unique[karyawan.nik]', [
-            'is_unique' => 'Nik ini sudah terdaftar!',
-            'required' => 'Nik tidak boleh kosong!'
-        ]);
-        $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[karyawan.email]', [
-            'is_unique' => 'Email ini sudah terdaftar!',
-            'required' => 'Email tidak boleh kosong!'
-        ]);
-        $this->form_validation->set_rules('jk', 'Jenis Kelamin', 'required');
-        $this->form_validation->set_rules('ttl', 'Tanggal Lahir', 'required');
-        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/tambah_karyawan', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-
-            $tgl = date('Y-m-d');
-            $nama = $this->input->post('nama');
-
-            $data = [
-                'id_fingerprint' => $this->input->post('id_fp'),
-                'nik' => $this->input->post('nik'),
-                'nama' => $nama,
-                'jk' => $this->input->post('jk'),
-                'email' => $this->input->post('email'),
-                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-                'ttl' => $this->input->post('ttl'),
-                'telp' => $this->input->post('no_telp'),
-                'alamat' => $this->input->post('alamat'),
-                'id_divisi' => $this->input->post('divisi'),
-                'intensif' => $this->input->post('intensif'),
-                'jam_mengajar' => $this->input->post('jam_mengajar'),
-                'nominal_jam' => $this->input->post('nominal_jam'),
-                'bpjs' => $this->input->post('bpjs'),
-                'koperasi' => $this->input->post('koperasi'),
-                'simpanan' => $this->input->post('simpanan'),
-                'tabungan' => $this->input->post('tabungan'),
-                'id_pend' => $this->input->post('pendidikan'),
-                'id_kelas' => $this->input->post('kelas'),
-                'role_id' => $this->input->post('level'),
-                'status' => 1,
-                'date_created' => $tgl,
-            ];
-
-            $this->db->insert('karyawan', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-           Data Karyawan <strong>' . $nama . '</strong> berhasil ditambahkan!
-           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-          </div>');
-            redirect('admin/karyawan');
-        }
-    }
-
-
-    public function update_karyawan()
-    {
-        $id      = $this->input->get('id');
-
-        $data['menu'] = 'menu-9';
-        $data['title'] = 'Update Karyawan';
-        $data['user'] = $this->db->get_where('karyawan', ['email' => $this->session->userdata('email')])->row_array();
-        $data['web'] =  $this->db->get('website')->row_array();
-
-        $data['pendidikan'] = $this->db->get('data_pendidikan')->result_array();
-        $data['kelas'] = $this->db->get('data_kelas')->result_array();
-        $data['karyawan'] =  $this->db->get_where('karyawan', ['id' => $id])->row_array();
-        $data['divisi'] =  $this->db->get('data_divisi')->result_array();
-
-        $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required');
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/sidebar_admin', $data);
-            $this->load->view('template/topbar_admin', $data);
-            $this->load->view('admin/edit_karyawan', $data);
-            $this->load->view('template/footer_admin');
-        } else {
-            $nama = $this->input->post('nama');
-            $data = [
-                'id_fingerprint' => $this->input->post('id_fp'),
-                'nik' => $this->input->post('nik'),
-                'nama' => $nama,
-                'jk' => $this->input->post('jk'),
-                'email' => $this->input->post('email'),
-                'ttl' => $this->input->post('ttl'),
-                'telp' => $this->input->post('no_telp'),
-                'alamat' => $this->input->post('alamat'),
-                'id_divisi' => $this->input->post('divisi'),
-                'intensif' => $this->input->post('intensif'),
-                'jam_mengajar' => $this->input->post('jam_mengajar'),
-                'nominal_jam' => $this->input->post('nominal_jam'),
-                'bpjs' => $this->input->post('bpjs'),
-                'koperasi' => $this->input->post('koperasi'),
-                'simpanan' => $this->input->post('simpanan'),
-                'tabungan' => $this->input->post('tabungan'),
-                'id_pend' => $this->input->post('pendidikan'),
-                'id_kelas' => $this->input->post('kelas'),
-                'role_id' => $this->input->post('level'),
-                'status' => $this->input->post('status')
-            ];
-
-            $this->db->where('id', $id);
-            $this->db->update('karyawan', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Data karyawan <strong>' . $nama . '</strong> berhasil diupdate :)
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>');
-            redirect('admin/update_karyawan?id=' . $id . '');
-        }
-    }
 }

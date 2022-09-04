@@ -6,13 +6,13 @@
     <div class="row">
 
         <div class="col-md-12 text-center">
-            <h1 class="h3 mb-4 text-gray-800"><i class="fa fa-user-plus fa-fw"></i> Pendaftaran Guru</h1>
+            <h1 class="h3 mb-4 text-gray-800"><i class="fa fa-user-plus fa-fw"></i> Tambah Guru</h1>
             <hr />
         </div>
         <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary"><i class="pt-2 fa fa-list-alt fa-fw"></i> Form Pendaftaran
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="pt-2 fa fa-list-alt fa-fw"></i> Form Tambah Data Guru
 
                         <div class="float-right">
                             <a href="<?= base_url('admin/daftar_guru') ?>" class="btn btn-block btn-primary btn-sm"><i class="fa fa-angle-double-left"></i> Data Guru</a>
@@ -46,10 +46,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Tempat Lahir</label>
-                                    <select class="form-control" id="kab" name="kab">
-                                        <option>- Pilih provinsi dahulu -</option>
-                                        <?= form_error('kab', '<small class="text-danger pl-3">', ' </small>') ?>
-                                    </select>
+                                    <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" placeholder="Tempat Lahir" value="<?= set_value('tempat_lahir') ?>">
                                 </div>
                                 <div class="form-group">
                                     <label>Tanggal Lahir</label>

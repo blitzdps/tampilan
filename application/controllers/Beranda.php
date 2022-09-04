@@ -16,7 +16,7 @@ class Beranda extends CI_Controller
         $data['tagline'] =  $this->db->get('tagline')->result_array();
         $data['sum_siswa'] = $this->db->get("tbl_siswa")->num_rows();
         $data['sum_guru'] = $this->db->get("tbl_guru")->num_rows();
-        $data['sum_pendidikan'] = $this->db->get("data_pendidikan")->num_rows();
+        // $data['sum_pendidikan'] = $this->db->get("data_pendidikan")->num_rows();
         $data['sum_kelas'] = $this->db->get("tbl_kelas")->num_rows();
         $this->db->order_by('id', 'DESC');
         $data['acara'] =  $this->db->get('acara', 3)->result_array();

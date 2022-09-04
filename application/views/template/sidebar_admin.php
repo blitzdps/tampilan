@@ -1,6 +1,6 @@
 <?php
-$notif_izin      = $this->db->get_where('perizinan', ['status' => 'Pending'])->num_rows();
-$notif_konseling = $this->db->get_where('konseling', ['status' => 'Pending'])->num_rows();
+// $notif_izin      = $this->db->get_where('perizinan', ['status' => 'Pending'])->num_rows();
+// $notif_konseling = $this->db->get_where('konseling', ['status' => 'Pending'])->num_rows();
 $notif_ppdb = $this->db->get_where('ppdb', ['status' => '0'])->num_rows();
 $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
 ?>
@@ -30,29 +30,29 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Data Master
+        Data Pengguna
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <?php if ($menu == 'menu-1') : ?>
+    <?php if ($menu == 'siswa') : ?>
         <li class="nav-item">
         <?php else : ?>
         <li class="nav-item">
         <?php endif; ?>
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSiswa" aria-expanded="true" aria-controls="collapseSiswa">
             <i class="fas fa-fw fa-users"></i>
             <span>Siswa</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseSiswa" class="collapse" aria-labelledby="headingSiswa" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Pilih menu:</h6>
-                <a class="collapse-item" href="<?= base_url('admin/daftar_siswa'); ?>">Data siswa</a>
-                <a class="collapse-item" href="<?= base_url('admin/tambah_siswa'); ?>">Pendaftaran siswa</a>
+                <a class="collapse-item" href="<?= base_url('admin_siswa'); ?>">Data siswa</a>
+                <a class="collapse-item" href="<?= base_url('admin_siswa/tambah'); ?>">Pendaftaran siswa</a>
             </div>
         </div>
         </li>
 
-    <?php if ($menu == 'menu-1') : ?>
+    <?php if ($menu == 'guru') : ?>
         <li class="nav-item">
         <?php else : ?>
         <li class="nav-item">
@@ -64,13 +64,13 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
         <div id="collapseGuru" class="collapse" aria-labelledby="headingGuru" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Pilih menu:</h6>
-                <a class="collapse-item" href="<?= base_url('admin/daftar_guru'); ?>">Data Guru</a>
-                <a class="collapse-item" href="<?= base_url('admin/tambah_guru'); ?>">Pendaftaran Guru</a>
+                <a class="collapse-item" href="<?= base_url('admin_guru'); ?>">Data Guru</a>
+                <a class="collapse-item" href="<?= base_url('admin_guru/tambah'); ?>">Pendaftaran Guru</a>
             </div>
         </div>
         </li>
 
-    <?php if ($menu == 'menu-1') : ?>
+    <!-- <?php if ($menu == 'menu-1') : ?>
         <li class="nav-item">
         <?php else : ?>
         <li class="nav-item">
@@ -86,7 +86,7 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
                 <a class="collapse-item" href="<?= base_url('admin/tambah_karyawan'); ?>">Pendaftaran Karyawan</a>
             </div>
         </div>
-        </li>
+        </li> -->
 
         <?php if ($menu == 'ppdb') : ?>
             <li class="nav-item active">
@@ -106,13 +106,132 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
     <hr class="sidebar-divider">
     <!-- Heading -->
     <div class="sidebar-heading">
+        Data Master
+    </div>
+
+                <!-- Nav Item - Utilities Collapse Menu -->
+
+                <?php if ($menu == 'pelajaran') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_pelajaran'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Pelajaran</span>
+                </a>
+                </li>
+                
+                <?php if ($menu == 'kelas') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_kelas'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Kelas</span>
+                </a>
+                </li>
+
+                <?php if ($menu == 'jadwal_pelajaran') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_jadwal_pelajaran'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Jadwal Pelajaran</span>
+                </a>
+                </li>
+
+                <?php if ($menu == 'jadwal_ujian') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_jadwal_ujian'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Jadwal Ujian</span>
+                </a>
+                </li>
+
+                <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
         Data KBM
     </div>
 
                 <!-- Nav Item - Utilities Collapse Menu -->
+
+                <?php if ($menu == 'tugas') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_tugas'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Tugas</span>
+                </a>
+                </li>
+                
+                <?php if ($menu == 'nilai_tugas') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_nilai_tugas'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Nilai Tugas</span>
+                </a>
+                </li>
+
+                <?php if ($menu == 'ulangan') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_ulangan'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Ulangan</span>
+                </a>
+                </li>
+
+                <?php if ($menu == 'nilai_ulangan') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_nilai_ulangan'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Nilai Ulangan</span>
+                </a>
+                </li>
+
+                <?php if ($menu == 'nilai_siswa') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin_nilai_siswa'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Nilai Siswa</span>
+                </a>
+                </li>
+
+                <?php if ($menu == 'list_absen') : ?>
+                <li class="nav-item active">
+                <?php else : ?>
+                <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link" href="<?= base_url('admin/daftar_absen'); ?>">
+                <i class="fas fa-fw fa-address-card"></i>
+                    <span>Absensi</span>
+                </a>
+                </li>
                 
 
-                    <?php if ($menu == 'kbm') : ?>
+                    <!-- <?php if ($menu == 'kbm') : ?>
                         <li class="nav-item active">
                         <?php else : ?>
                         <li class="nav-item">
@@ -134,7 +253,7 @@ $notif_kontak = $this->db->get_where('kontak', ['status' => 1])->num_rows();
                                 <a class="collapse-item" href="<?= base_url('admin/tugas'); ?>">Tugas</a>
                             </div>
                         </div>
-                        </li>
+                        </li> -->
                                  <!-- Divider -->
                                 <hr class="sidebar-divider">
                                 <!-- Heading -->

@@ -14,7 +14,7 @@
                         </div>
                     </h4>
                     <?= $this->session->flashdata('message') ?>
-                    <form style="margin: 20px 0;" action="<?= base_url() . 'admin/jadwal_ujian'; ?>" method="post">
+                    <form style="margin: 20px 0;" action="<?= base_url() . 'admin_jadwal_ujian'; ?>" method="post">
                         <div class="form-row">
                             <div class="form-group col-lg-3">
                             <a href="" class="btn btn-block btn-sm btn-info" data-toggle="modal" data-target="#addNewData"><i class="fa fa-plus-circle"></i> Tambah Data Jadwal Ujian</a>
@@ -43,11 +43,11 @@
                                     <tr>
                                         <th width="50"><?= $i ?></th>
                                         <td><?= $d['tanggal'] ?></td>
-                                        <td><?= $d['id_pelajaran'] ?></td>
+                                        <td><?= $d['nama_pelajaran'] ?></td>
                                         <td><?= $d['jam_mulai'] ?></td>
                                         <td><?= $d['jam_selesai'] ?></td>
                                         <td><?= $d['keterangan'] ?></td>
-                                        <td width="200">
+                                        <td width="50">
                                             <a href="#" class="badge badge-success" data-toggle="modal" data-target="#updateData<?= $d['id_jadwal_ujian'] ?>">Edit</a>
                                             <a href="" class="badge badge-danger" data-toggle="modal" data-target="#deleteData<?= $d['id_jadwal_ujian'] ?>">Hapus</a>
 
@@ -63,28 +63,33 @@
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                <form action="<?= base_url('update/update_jadwal_ujian') ?>" method="post">
+                                                <form action="<?= base_url('admin_jadwal_ujian/ubah') ?>" method="post">
                                                     <div class="modal-body">
 
                                                         <div class="form-group">
+                                                        <input type="hidden" name="id_jadwal_ujian" id="id_jadwal_ujian" value="<?= $d['id_jadwal_ujian'] ?>">
+
+
                                                             <input type="hidden" name="tanggal" id="tanggal" value="<?= $d['tanggal'] ?>">
                                                             <label for="">Tanggal</label>
-                                                            <input type="text" class="form-control" id="tanggal" name="tanggal" value="<?= $d['tanggal'] ?>" placeholder="Tanggal">
+                                                            <input type="date" class="form-control" id="tanggal" name="tanggal" value="<?= $d['tanggal'] ?>" placeholder="Tanggal">
                                                         </div>
                                                         <div class="form-group">
                                                             <input type="hidden" name="id_pelajaran" id="id_pelajaran" value="<?= $d['id_pelajaran'] ?>">
+                                                            
                                                             <label for="">Pelajaran</label>
                                                             <input type="text" class="form-control" id="id_pelajaran" name="id_pelajaran" value="<?= $d['id_pelajaran'] ?>" placeholder="Pelajaran">
                                                         </div>
+                                                        
                                                         <div class="form-group">
                                                             <input type="hidden" name="jam_mulai" id="jam_mulai" value="<?= $d['jam_mulai'] ?>">
                                                             <label for="">Jam Mulai</label>
-                                                            <input type="text" class="form-control" id="jam_mulai" name="jam_mulai" value="<?= $d['jam_mulai'] ?>" placeholder="Jam Mulai">
+                                                            <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" value="<?= $d['jam_mulai'] ?>" placeholder="Jam Mulai">
                                                         </div>
                                                         <div class="form-group">
                                                             <input type="hidden" name="jam_selesai" id="jam_selesai" value="<?= $d['jam_selesai'] ?>">
                                                             <label for="">Jam Selesai</label>
-                                                            <input type="text" class="form-control" id="jam_selesai" name="jam_selesai" value="<?= $d['jam_selesai'] ?>" placeholder="Jam Selesai">
+                                                            <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" value="<?= $d['jam_selesai'] ?>" placeholder="Jam Selesai">
                                                         </div>
                                                         <div class="form-group">
                                                             <input type="hidden" name="keterangan" id="keterangan" value="<?= $d['keterangan'] ?>">
@@ -119,7 +124,7 @@
 
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                    <a href="<?= base_url('hapus/hapus_jadwal_ujian?id_jadwal_ujian=') ?><?= $d['id_jadwal_ujian'] ?>" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                                    <a href="<?= base_url('admin_jadwal_ujian/hapus?id_jadwal_ujian=') ?><?= $d['id_jadwal_ujian'] ?>" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
                                                 </div>
 
                                             </div>
@@ -202,7 +207,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<?= base_url('admin/jadwal_ujian') ?>" method="post">
+            <form action="<?= base_url('admin_jadwal_ujian/tambah') ?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="">Tanggal</label>
